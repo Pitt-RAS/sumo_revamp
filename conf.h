@@ -57,46 +57,6 @@
 
 ////BELOW HAS NOT YET BEEN UPDATED/////////
 
-
-// RANGE SENSOR OPTIONS
-
-// Range sensor directions
-#define RANGE_DIAG_LEFT_PIN RANGE1_PIN
-#define RANGE_DIAG_RIGHT_PIN RANGE2_PIN
-#define RANGE_LEFT_PIN RANGE3_PIN
-#define RANGE_RIGHT_PIN RANGE4_PIN
-#define RANGE_FRONT_PIN RANGE5_PIN
-
-// Range sensor distance offsets
-#define RANGE_DIAG_LEFT_OFFSET -35
-#define RANGE_DIAG_RIGHT_OFFSET -35
-#define RANGE_LEFT_OFFSET 15
-#define RANGE_RIGHT_OFFSET 15
-#define RANGE_FRONT_OFFSET 30
-
-// Range sensor wall thresholds
-#define RANGE_DIAG_LEFT_WALL_THRESHOLD 75
-#define RANGE_DIAG_RIGHT_WALL_THRESHOLD 75
-#define RANGE_LEFT_WALL_THRESHOLD 70
-#define RANGE_RIGHT_WALL_THRESHOLD 70
-#define RANGE_FRONT_WALL_THRESHOLD 125
-
-#define LEFT_LOW_THRESHOLD 50
-#define LEFT_HIGH_THRESHOLD 100
-#define RIGHT_LOW_THRESHOLD 50
-#define RIGHT_HIGH_THRESHOLD 100
-
-// Range sensor middle readings
-#define RANGE_DIAG_LEFT_MIDDLE 80
-#define RANGE_DIAG_RIGHT_MIDDLE 80
-#define RANGE_LEFT_MIDDLE 100
-#define RANGE_RIGHT_MIDDLE 100
-#define RANGE_FRONT_MIDDLE 100
-
-// Number of samples in moving average
-#define RANGE_QUEUE_MAX_LENGTH 10
-#define HISTORY_QUEUE_MAX_LENGTH 100
-
 // Number of old samples to clear when wall status changes
 #define RANGE_QUEUE_NUM_TO_CLEAR 5
 
@@ -114,17 +74,17 @@
 #define KD_ROTATION 0
 
 // Robot characteristics
-#define ROBOT_MASS .226 // kilograms
+#define ROBOT_MASS .500 // kilograms
 #define MM_BETWEEN_WHEELS 85.5 // millimeters
-#define NUMBER_OF_MOTORS 2
+#define NUMBER_OF_MOTORS 4
 #define STEPS_PER_MOTOR_REV 12// the number of encoder steps we get per wheel revolution
 #define BATTERY_VOLTAGE 8.1 // Volts
-#define MAX_ACCEL_STRAIGHT 4 // m/s/s
-#define MAX_DECEL_STRAIGHT -4 // m/s/s
-#define MAX_ACCEL_ROTATE 3 // m/s/s  
-#define MAX_DECEL_ROTATE -3 // m/s/s
-#define MAX_ACCEL_CORNER 3 // m/s/s  
-#define MAX_DECEL_CORNER -3 // m/s/s
+//#define MAX_ACCEL_STRAIGHT 4 // m/s/s
+//#define MAX_DECEL_STRAIGHT -4 // m/s/s
+//#define MAX_ACCEL_ROTATE 3 // m/s/s  
+//#define MAX_DECEL_ROTATE -3 // m/s/s
+//#define MAX_ACCEL_CORNER 3 // m/s/s  
+//#define MAX_DECEL_CORNER -3 // m/s/s
 
 
 #define GEAR_RATIO 9.96 // gear ratio between motor and wheels
