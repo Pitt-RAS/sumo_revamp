@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <cstdint.h>
-#include ""config.h"
+#include "config.h"
 
 extern bool prox1;
 extern bool prox2;
