@@ -11,7 +11,7 @@
 */
 
 //BlueTooth Pins
-#define BT_RX 0
+#define BT_TX 0
 #define BT_RX 1
 
 //LineSensing Pins
@@ -36,23 +36,25 @@
 #define FL_ENCODERB_PIN 14
 #define FL_ENCODERA_PIN 15
 #define BR_ENCODERA_PIN 26
-#define BR_ENCODERB_PIN 27
+#define FR_ENCODERB_PIN 27
 #define BL_ENCODERA_PIN 28
 #define BL_ENCODERB_PIN 29
 #define FR_ENCODERA_PIN 30
-#define FR_ENCODERB_PIN 31
+#define BR_ENCODERB_PIN 31
 
 //Motor Pins
-#define R_MOTOR_DIR_PIN A3 //17
-#define L_MOTOR_DIR_PIN A6 //20
-#define L_MOTOR_PWM_PIN A7 //21
-#define R_MOTOR_PWM_PIN A8 //22
+#define R_MOTOR_DIR_PIN 17 //A3
+#define L_MOTOR_DIR_PIN 20 //A6
+#define L_MOTOR_PWM_PIN 21 //A7
+#define R_MOTOR_PWM_PIN 22 //A8
 
 //Misc
+#define SIGNAL_LED 13
 #define ACCEL_INT_PIN 16
-#define SDA0_PIN 18
-#define SCL0_PIN 19
+#define SDA_PIN 18
+#define SCL_PIN 19
 #define BUZZER_PIN 23
+#define BUTTON 33
 #define BATT_TEST_PIN A10
 
 ////BELOW HAS NOT YET BEEN UPDATED/////////
