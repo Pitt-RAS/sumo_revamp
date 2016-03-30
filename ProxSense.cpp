@@ -3,11 +3,11 @@
 
 ProxSense::ProxSense(int proxPin[5])
 {
-	weight[0] = -6;
-	weight[1] = -3;
+	weight[0] = -90;
+	weight[1] = -45;
 	weight[2] = 0;
-	weight[3] = 3;
-	weight[4] = 6;
+	weight[3] = 45;
+	weight[4] = 90;
 }
 
 ProxSense::~ProxSense()
