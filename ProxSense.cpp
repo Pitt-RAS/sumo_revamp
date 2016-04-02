@@ -20,7 +20,7 @@ void ProxSense::update()
 
 int ProxSense::generateAngle()
 {
-	int sum;
+	int sum = 0;
 	int angle;
 	for(int ii = 0; ii < 5; ii++)
 	{
