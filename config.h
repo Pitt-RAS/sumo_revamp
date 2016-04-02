@@ -43,10 +43,12 @@
 #define BR_ENCODERB_PIN 31
 
 //Motor Pins
-#define R_MOTOR_DIR_PIN 17 //A3
 #define L_MOTOR_DIR_PIN 20 //A6
 #define L_MOTOR_PWM_PIN 21 //A7
+#define L_MOTOR_FORWARD_STATE true
+#define R_MOTOR_DIR_PIN 17 //A3
 #define R_MOTOR_PWM_PIN 22 //A8
+#define R_MOTOR_FORWARD_STATE true
 
 //Misc
 #define SIGNAL_LED 13

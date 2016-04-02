@@ -10,23 +10,22 @@ static float idealMotorOutput(float force, float velocity) {
   return ((required_current * RATED_INTERNAL_RESISTANCE + back_emf) / BATTERY_VOLTAGE);
 }
 
-Motor motor_l (L_MOTOR_DIR_PIN, MOTOR_A2_PIN, L_MOTOR_PWM_PIN);
-Motor motor_r (R_MOTOR_DIR_PIN, MOTOR_B2_PIN, R_MOTOR_PWM_PIN);
+Motor motor_l (L_MOTOR_DIR_PIN, L_MOTOR_PWM_PIN, L_MOTOR_FORWARD_STATE);
+Motor motor_r (R_MOTOR_DIR_PIN, R_MOTOR_PWM_PIN, R_MOTOR_FORWARD_STATE);
 
-Motor::Motor(int pin1, int pin2, int pwm_pin) {
-  pin1_ = pin1;
-  pin2_ = pin2;
-  pin_pwm_ = pwm_pin;
+Motor::Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state){
+  pin_ = motor_f_pin;
+  pin_pwm_ = motor_f_pwm_pin;
+  forward_state_ = motor_f_forward_state;
 
-  pinMode(pin1_, OUTPUT);
-  pinMode(pin2_, OUTPUT);
+  pinMode(pin_, OUTPUT);
   pinMode(pin_pwm_, OUTPUT);
 }
 
 void Motor::Set(float accel, float current_velocity) {
   float force;
   float speed;
-  int pin1_state, pin2_state;
+  int pin_state;
   int speed_raw;
 
   if (current_velocity > 0) {
@@ -43,17 +42,11 @@ void Motor::Set(float accel, float current_velocity) {
   speed_raw = abs((int)(round(PWM_SPEED_STEPS * speed)));
 
   if (speed > 0.0) {
-    pin1_state = HIGH;
-    pin2_state = LOW;
-  } else if (speed < 0.0) {
-    pin1_state = LOW;
-    pin2_state = HIGH;
+    pin_state = HIGH;
   } else {
-    pin1_state = LOW;
-    pin2_state = LOW;
+    pin_state = LOW;
   }
 
-  digitalWrite(pin1_, pin1_state);
-  digitalWrite(pin2_, pin2_state);
+  digitalWrite(pin_, pin_state ^ forward_state_ ^ 1);
   analogWrite(pin_pwm_, speed_raw);
 }

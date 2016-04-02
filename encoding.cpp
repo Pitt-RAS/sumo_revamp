@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <EncoderMod.h>
 #include "config.h"
 #include "encoding.h"
 

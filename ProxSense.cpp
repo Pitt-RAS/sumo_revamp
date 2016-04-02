@@ -10,16 +10,11 @@ ProxSense::ProxSense(int proxPin[5])
 	weight[4] = 90;
 }
 
-ProxSense::~ProxSense()
-{
-	
-}
-
 void ProxSense::update()
 {
-	for(int ii = 0: ii < 5; ii++)
+	for(int ii = 0; ii < 5; ii++)
 	{
-		prox[ii] = digitalRead(ProxPin[ii]);
+		prox[ii] = digitalRead(proxPin[ii]);
 	}
 }
 
@@ -29,9 +24,9 @@ int ProxSense::generateAngle()
 	int angle;
 	for(int ii = 0; ii < 5; ii++)
 	{
-		sum = sum + prox[ii] * weight[ii]
+		sum = sum + prox[ii] * weight[ii];
 	}
 	
-	angle = sum/ii;
-	
+	angle = sum/5;
+	return angle;
 }
