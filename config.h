@@ -31,6 +31,7 @@
 #define F_PROX3_PIN 24
 #define F_PROX4_PIN 25
 #define F_PROX5_PIN 32
+
 #define R_PROX1_PIN 12
 #define R_PROX2_PIN 11
 #define R_PROX3_PIN 10

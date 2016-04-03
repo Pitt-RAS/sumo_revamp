@@ -9,7 +9,7 @@ private:
 	int weight[5];
 	
 public:
-  ProxSense(int*);
+  ProxSense(int*, int*);
 	void update();
 	int generateAngle();
 	bool sensorHigh();

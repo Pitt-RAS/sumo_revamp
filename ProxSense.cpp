@@ -1,13 +1,10 @@
 #include "ProxSense.h"
 #include "Arduino.h"
 
-ProxSense::ProxSense(int proxPin_[5])
+ProxSense::ProxSense(int proxPin[5], int weight[5])
 {
-	weight[0] = -90;
-	weight[1] = -45;
-	weight[2] = 0;
-	weight[3] = 45;
-	weight[4] = 90;
+  memcpy(this->proxPin, proxPin, 5*sizeof(int));
+  memcpy(this->weight, weight, 5*sizeof(int));
 
   for(int i = 0; i < 5; i++) {
     pinMode(proxPin[i], INPUT);
