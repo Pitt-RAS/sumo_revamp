@@ -10,9 +10,6 @@ static float idealMotorOutput(float force, float velocity) {
   return ((required_current * RATED_INTERNAL_RESISTANCE + back_emf) / BATTERY_VOLTAGE);
 }
 
-Motor motor_l (L_MOTOR_DIR_PIN, L_MOTOR_PWM_PIN, L_MOTOR_FORWARD_STATE);
-Motor motor_r (R_MOTOR_DIR_PIN, R_MOTOR_PWM_PIN, R_MOTOR_FORWARD_STATE);
-
 Motor::Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state){
   pin_ = motor_f_pin;
   pin_pwm_ = motor_f_pwm_pin;
@@ -20,6 +17,8 @@ Motor::Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state){
 
   pinMode(pin_, OUTPUT);
   pinMode(pin_pwm_, OUTPUT);
+  // Set higher pwm frequency for smoother motor control.
+  analogWriteFrequency(pin_pwm_, 46875);
 }
 
 void Motor::Set(float accel, float current_velocity) {

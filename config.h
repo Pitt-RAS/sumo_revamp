@@ -3,6 +3,10 @@
 
 #include <Arduino.h>
 
+
+//Uncomment to enable the hardware test and disable normal operation
+//#define HARDWARE_TEST
+
 //*************************** Define pin assignments for teensy3.2 on Rev1 PCB ******************************************
 // FR = Front Right | FL = Front Left | BR = Back Right | BL = Back Left
 /*Undefined Pins
@@ -13,6 +17,7 @@
 //BlueTooth Pins
 #define BT_TX 0
 #define BT_RX 1
+#define BAUD 115200
 
 //LineSensing Pins
 #define FR_LINESENSE_PIN 2
@@ -50,14 +55,43 @@
 #define R_MOTOR_PWM_PIN 22 //A8
 #define R_MOTOR_FORWARD_STATE true
 
+#define PWM_SPEED_BITS 10
+#define PWM_SPEED_STEPS 1024 // = 2^PWM_SPEED_BITS
+
 //Misc
 #define SIGNAL_LED 13
-#define ACCEL_INT_PIN 16
-#define SDA_PIN 18
-#define SCL_PIN 19
+#define IMU_INTERRUPT_PIN 16
 #define BUZZER_PIN 23
 #define BUTTON 33
+
+//Battery Level Testing
 #define BATT_TEST_PIN A10
+#define BATTERY_VOLTAGE_WARNING 7.7
+#define BATTERY_VOLTAGE_DIVIDER_RATIO (10.0/(10.0+20.0)) // Vdd -- 20K -- VBat -- 10K -- GND
+#define BATTERY_VOLTAGE_WARNING_COUNT (BATTERY_VOLTAGE_WARNING * (1023.0/3.3) * BATTERY_VOLTAGE_DIVIDER_RATIO)
+
+// Logging configuration
+#define LOG_SIZE 500
+
+// Gyro parameters
+#define GYRO_LSB_PER_DEG_PER_S 16.295
+#define GYRO_CALIBRATION_SAMPLES 2000
+#define GYRO_CALIBRATION_ROUNDS 3
+#define GYRO_OFFSET_SETTING -43
+#define GYRO_SECONDARY_OFFSET 11.0050
+
+// Accelerometer parameters
+#define ACCEL_LSB_PER_G 2048
+
+// Magnetometer parameters
+#define MAG_CYCLES_PER_UPDATE 5
+#define MAG_COMPLEMENTARY_FILTER 0.00
+
+// Motor stop failsafe parameters
+#define FAILSAFE_GYRO_THRESHOLD 100 // in deg/s
+#define FAILSAFE_GYRO_ANGLE 20 // in deg
+#define FAILSAFE_ACCEL_THRESHOLD 10// in mg
+
 
 ////BELOW HAS NOT YET BEEN UPDATED/////////
 
@@ -93,7 +127,6 @@
 
 #define GEAR_RATIO 9.96 // gear ratio between motor and wheels
 #define MAX_VEL_STRAIGHT 0.5 // m/s   limited by the maximum velocity at which motors can deliver max accel
-#define PWM_SPEED_STEPS 1023 // maximum PWM value for the system
 
 // Motor spec sheet parameters
 #define RATED_VOLTAGE 8 // Voltage that ratings were measured with
