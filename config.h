@@ -11,7 +11,6 @@
 // FR = Front Right | FL = Front Left | BR = Back Right | BL = Back Left
 /*Undefined Pins
 	13
-	33
 */
 
 //BlueTooth Pins
@@ -61,7 +60,7 @@
 
 //Misc
 #define SIGNAL_LED 13
-#define IMU_INTERRUPT_PIN 16
+#define IMU_INTERRUPT_PIN 16 //(Accelerometer)
 #define BUZZER_PIN 23
 #define BUTTON 33
 
