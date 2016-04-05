@@ -27,20 +27,61 @@ Motor motor_r (R_MOTOR_DIR_PIN, R_MOTOR_PWM_PIN, R_MOTOR_FORWARD_STATE);
 Orientation* mpu = Orientation::getInstance();
 
 void setup() {
-  //Set the LED pin, turn it off for now
+	
+  ///////////////Setting all necessary pinModes////////////////////////
+  //LineSensing Pins
+  pinMode(FR_LINESENSE_PIN, INPUT);
+  pinMode(FL_LINESENSE_PIN, INPUT);
+  pinMode(BL_LINESENSE_PIN, INPUT);
+  pinMode(BR_LINESENSE_PIN, INPUT);
+  
+  //ProxSense Pins
+  pinMode(F_PROX1_PIN, INPUT);
+  pinMode(F_PROX2_PIN, INPUT);
+  pinMode(F_PROX3_PIN, INPUT);
+  pinMode(F_PROX4_PIN, INPUT);
+  pinMode(F_PROX5_PIN, INPUT);
+  
+  pinMode(R_PROX1_PIN, INPUT);
+  pinMode(R_PROX2_PIN, INPUT);
+  pinMode(R_PROX3_PIN, INPUT);
+  pinMode(R_PROX4_PIN, INPUT);
+  pinMode(R_PROX5_PIN, INPUT);
+  
+  //Encoder Pins
+  pinMode(FL_ENCODERB_PIN, INPUT);
+  pinMode(FL_ENCODERA_PIN, INPUT);
+  pinMode(BR_ENCODERA_PIN, INPUT);
+  pinMode(FR_ENCODERB_PIN, INPUT);
+  pinMode(BL_ENCODERA_PIN, INPUT);
+  pinMode(BL_ENCODERB_PIN, INPUT);
+  pinMode(FR_ENCODERA_PIN, INPUT);
+  pinMode(BR_ENCODERB_PIN, INPUT);
+  
+  //Motor Pins
+  pinMode(L_MOTOR_DIR_PIN, INPUT);
+  pinMode(L_MOTOR_PWM_PIN, INPUT);
+  pinMode(R_MOTOR_DIR_PIN, INPUT);
+  pinMode(R_MOTOR_PWM_PIN, INPUT);
+  
+  //MISC
   pinMode(SIGNAL_LED, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(BUTTON, INPUT);
+  pinMode(BATT_TEST_PIN, INPUT);
+  
+  //ToDo: Initialize IMU_INTERRUPT_PIN (Accelerometer) to a pinMode
+  
+  
+  ///////////////////Beginning Other PreSetup Scripts//////////////////////
+  //Turn off LED
   digitalWrite(SIGNAL_LED, 0);
-
+ 
+ //Set Serial Baud for debugging
   Serial.begin(BAUD);
 
   // PWM resolution is 0-1023.
   analogWriteResolution(PWM_SPEED_BITS);
-  
-  //Misc
-  #define ACCEL_INT_PIN 16
-
-	//Setup button
-	pinMode(BUTTON, INPUT);
 
   //Check Battery
   if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){
