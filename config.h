@@ -132,12 +132,12 @@
 #define RATED_VOLTAGE 8 // Voltage that ratings were measured with
 #define RATED_INTERNAL_RESISTANCE 3.1 // ohms of resistance in motor coils
 #define RATED_FREERUN_CURRENT 0.06// Amps
-#define RATED_RPM_PER_VBEMF 818000 // RPM/Volt
+#define RATED_RPM_PER_VBEMF (3000.0/6.0) // RPM/Volt
 #define RATED_TORQUE_PER_AMP 0.000622353 // torque in N-m at output shaft, Amps passed through motor
 
 // Convert motor parameters to robot parameters
 #define WHEEL_RADIUS (MM_PER_STEP * STEPS_PER_MOTOR_REV * GEAR_RATIO / (2 * 3.14159265359))// in millimeters
-#define FORCE_PER_AMP (RATED_TORQUE_PER_AMP * GEAR_RATIO * NUMBER_OF_MOTORS * 1000 / WHEEL_RADIUS) // in Newtons
+#define FORCE_PER_AMP (RATED_TORQUE_PER_AMP * GEAR_RATIO * 1000 / WHEEL_RADIUS) // in Newtons
 #define VELOCITY_PER_VBEMF (RATED_RPM_PER_VBEMF * STEPS_PER_MOTOR_REV * GEAR_RATIO * MM_PER_STEP / (60000)) // 60000 is for mm to m and s to min
 #define FRICTION_FORCE (RATED_FREERUN_CURRENT * FORCE_PER_AMP + 0.10) // Newtons (0.08 calculated Newtons from motor/gearbox)  amount of force opposing motion in robot including rolling resistance, sliding, gearing
 
