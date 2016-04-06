@@ -1,39 +1,43 @@
 #ifndef MICROMOUSE_MOTION_H_
 #define MICROMOUSE_MOTION_H_
 
-#include "IdealSweptTurns.h"
+#include "Arduino.h"
+#include "config.h"
+#include "encoding.h"
+#include "motors.h"
+#include "PIDController.h"
 
-void motion_set_max_speed(float new_max_speed);
-void motion_set_max_accel(float new_max_accel);
+enum Direction { forward, backward };
+enum MovementType {charge, search_arc, deploy_ramps, stop};
 
-void motion_forward(float distance, float current_speed, float exit_speed);
-void motion_forward_diag(float distance, float current_speed, float exit_speed);
-void motion_collect(float distance, float current_speed, float exit_speed);
-void motion_rotate(float angle);
-void motion_gyro_rotate(float angle);
-void motion_corner(SweptTurnType turn_type, float speed, float size_scaling = 1);
+class Motion
+{
+private:
+	Motor motor_l;
+	Motor motor_r;
+	
+	PIDController pid_left;
+	PIDController pid_right;
+	
+	MovementType movement_state;
+	
+	//Private motion functions
+	void setVelRaw(Direction r, int pwmr, Direction l, int pwml);
+	void setVel(int v, float w);
+	
+	void control_charge();
+	void control_search_arc();
+	void control_deploy_ramps();
 
-void motion_hold(unsigned int time);
-void motion_hold_range(int setpoint, unsigned int time);
+public:
+  Motion();
+	void charge();
+	void search_arc();
+	void deploy_ramps();
+	
+	//Must be called a set rate
+	void update();
 
-// functions to set max velocity variables
-void motion_set_maxAccel_straight(float temp_max_accel_straight);
-void motion_set_maxDecel_straight(float temp_max_decel_straight);
-void motion_set_maxAccel_rotate(float temp_max_accel_rotate);
-void motion_set_maxDecel_rotate(float temp_max_decel_rotate);
-void motion_set_maxAccel_corner(float temp_max_accel_corner);
-void motion_set_maxDecel_corner(float temp_max_decel_corner);
-void motion_set_maxVel_straight(float temp_max_vel_straight);
-void motion_set_maxVel_rotate(float temp_max_vel_rotate);
-void motion_set_maxVel_corner(float temp_max_vel_corner);
-float motion_get_maxAccel_straight();
-float motion_get_maxDecel_straight();
-float motion_get_maxAccel_rotate();
-float motion_get_maxDecel_rotate();
-float motion_get_maxAccel_corner();
-float motion_get_maxDecel_corner();
-float motion_get_maxVel_straight();
-float motion_get_maxVel_rotate();
-float motion_get_maxVel_corner();
-
+ };
+ 
 #endif
