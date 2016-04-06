@@ -9,6 +9,7 @@
 #include "I2Cdev.h"
 #include "MPU9150.h"
 #include "Logger.h"
+#include "motion.h"
 
 //Create proximity sensor pin array initailize proximity sensors
 int proximity_sensors_front[5]        = {F_PROX1_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_PIN};
