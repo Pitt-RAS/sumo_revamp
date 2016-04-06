@@ -9,6 +9,7 @@
 #include "I2Cdev.h"
 #include "MPU9150.h"
 #include "Logger.h"
+#include "motion.h"
 
 //Create proximity sensor pin array initailize proximity sensors
 int proximity_sensors_front[5]        = {F_PROX1_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_PIN};
@@ -20,9 +21,6 @@ ProxSense frontProx(proximity_sensors_front, proximity_sensors_front_weight);
 ProxSense rearProx(proximity_sensors_rear, proximity_sensors_rear_weight);
 
 //Todo: initialize line sensor objects
-
-Motor motor_l (L_MOTOR_DIR_PIN, L_MOTOR_PWM_PIN, L_MOTOR_FORWARD_STATE);
-Motor motor_r (R_MOTOR_DIR_PIN, R_MOTOR_PWM_PIN, R_MOTOR_FORWARD_STATE);
 
 Orientation* mpu = Orientation::getInstance();
 
