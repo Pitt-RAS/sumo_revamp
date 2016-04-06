@@ -23,7 +23,7 @@ private:
 	
 	//Private motion functions
 	void setVelRaw(Direction r, int pwmr, Direction l, int pwml);
-	void setVel(int v, float w);
+	void setVel(float v, float w);
 	
 	void control_charge();
 	void control_search_arc();
