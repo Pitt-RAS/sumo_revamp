@@ -28,7 +28,7 @@ Orientation::Orientation() {
 
   // enable interrupt detection
   Serial.println(F("Enabling MPU9150 interrupt detection..."));
-  pinMode(IMU_INTERRUPT_PIN, INPUT);
+  
 
 #ifdef CORE_TEENSY
   attachInterrupt(IMU_INTERRUPT_PIN, interruptHandler, RISING);

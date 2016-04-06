@@ -15,8 +15,6 @@ Motor::Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state){
   pin_pwm_ = motor_f_pwm_pin;
   forward_state_ = motor_f_forward_state;
 
-  pinMode(pin_, OUTPUT);
-  pinMode(pin_pwm_, OUTPUT);
   // Set higher pwm frequency for smoother motor control.
   analogWriteFrequency(pin_pwm_, 46875);
 }

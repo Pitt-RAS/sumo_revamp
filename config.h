@@ -56,13 +56,13 @@
 #define R_MOTOR_FORWARD_STATE true
 
 #define PWM_SPEED_BITS 10
-#define PWM_SPEED_STEPS 1024 // = 2^PWM_SPEED_BITS
+#define PWM_SPEED_STEPS 1023 // = 2^PWM_SPEED_BITS
 
 //Misc
-#define SIGNAL_LED 13
+#define SIGNAL_LED_PIN 13
 #define IMU_INTERRUPT_PIN 16 //(Accelerometer)
 #define BUZZER_PIN 23
-#define BUTTON 33
+#define BUTTON_PIN 33
 
 //Battery Level Testing
 #define BATT_TEST_PIN A10
@@ -125,7 +125,7 @@
 //#define MAX_DECEL_CORNER -3 // m/s/s
 
 
-#define GEAR_RATIO 9.96 // gear ratio between motor and wheels
+#define GEAR_RATIO 29.86 // gear ratio between motor and wheels
 #define MAX_VEL_STRAIGHT 0.5 // m/s   limited by the maximum velocity at which motors can deliver max accel
 
 // Motor spec sheet parameters

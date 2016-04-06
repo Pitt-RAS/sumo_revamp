@@ -59,36 +59,40 @@ void setup() {
   pinMode(BR_ENCODERB_PIN, INPUT);
   
   //Motor Pins
-  pinMode(L_MOTOR_DIR_PIN, INPUT);
-  pinMode(L_MOTOR_PWM_PIN, INPUT);
-  pinMode(R_MOTOR_DIR_PIN, INPUT);
-  pinMode(R_MOTOR_PWM_PIN, INPUT);
+  pinMode(L_MOTOR_DIR_PIN, OUTPUT);
+  pinMode(L_MOTOR_PWM_PIN, OUTPUT);
+  pinMode(R_MOTOR_DIR_PIN, OUTPUT);
+  pinMode(R_MOTOR_PWM_PIN, OUTPUT);
+  analogWrite(L_MOTOR_PWM_PIN, 0);
+  analogWrite(R_MOTOR_PWM_PIN, 0);
   
   //MISC
-  pinMode(SIGNAL_LED, OUTPUT);
+  pinMode(SIGNAL_LED_PIN, OUTPUT);
+  digitalWrite(SIGNAL_LED_PIN, 0);
   pinMode(BUZZER_PIN, OUTPUT);
-  pinMode(BUTTON, INPUT);
-  pinMode(BATT_TEST_PIN, INPUT);
-  
-  //ToDo: Initialize IMU_INTERRUPT_PIN (Accelerometer) to a pinMode
+  analogWrite(BUZZER_PIN, 0);
+  pinMode(BUTTON_PIN, INPUT);
+  pinMode(IMU_INTERRUPT_PIN, INPUT);
   
   
   ///////////////////Beginning Other PreSetup Scripts//////////////////////
-  //Turn off LED
-  digitalWrite(SIGNAL_LED, 0);
  
  //Set Serial Baud for debugging
   Serial.begin(BAUD);
 
   // PWM resolution is 0-1023.
   analogWriteResolution(PWM_SPEED_BITS);
+  
 
   //Check Battery
   if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){
-    analogWriteFrequency(BUZZER_PIN, 2000);
-    analogWrite(BUZZER_PIN, PWM_SPEED_STEPS / 2);
-    delay(100000);
+    tone(BUZZER_PIN, 2000);
   }
+  
+  // Set higher pwm frequency for smoother motor control.
+  analogWriteFrequency(L_MOTOR_PWM_PIN, 46875);
+  analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
+  
 }
 
 
