@@ -15,33 +15,15 @@ void Motion::update()
 {
 	//Update PID controllers
 	//Compare current velocities to desired, using PID loop to calculate the new the settings to send to setVelRaw();
-	
-	//Below is probably not needed, I'll think about it in the morning
-	/*switch(movement_state){
-		case MovementType::charge:
-			control_charge();
-			break;
-		case MovementType::search_arc:
-			control_search_arc();
-			break;
-		case MovementType::deploy_ramps:
-			control_deploy_ramps();
-			break;
-		case MovementType::stop:
-			setVel(0, 0);
-			break;
-	}*/
 }
 //Public state setting methods
 void Motion::charge(int velocity)
 {
-	//movement_state = MovementType::charge
 	setVel(velocity, 0); //Go forward not rotation
 }
 
 void Motion::search_arc(int velocity, int rotation)
 {
-	//movement_state = MovementType::search_arc;
 	setVel(velocity, rotation); //10 m/s, 10rad/s rotation
 }
 
@@ -52,29 +34,6 @@ void Motion::deploy_ramps()
 	setVel(0, 512);//Spin
 	delay(500); //Delay
 	setVel(0, 0); //Stop
-}
-//Private methods
-void Motion::setVelRaw(Direction r, int pwmr, Direction l, int pwml){
-	//Actually set things to the motor 
-	bool r_d;
-	bool l_d;
-	//Actually set things to the motor
-	if(r == Direction::forward){
-		r_d = true;
-	} else{
-		r_d = false;
-	}
-	
-	//Actually set things to the motor
-	if(l == Direction::forward){
-		l_d = true;
-	} else{
-		l_d = false;
-	}
-	
-	motor_r.SetRaw(r_d, pwmr);
-	motor_l.SetRaw(l_d, pwml);
-	//motor_lf.Set(0.0, EnRead2() * 1000000 * MM_PER_STEP / 1000);
 }
 
 void Motion::setVel(float v, float w){
@@ -114,18 +73,26 @@ void Motion::setVel(float v, float w){
 	setVelRaw(directionr, pwml, directionl, pwmr);
 }
 
-//These might not be needed
-void Motion::control_charge()
-{
-	//setVel(10, 0); //Go forward not rotation
-}
-
-void Motion::control_search_arc()
-{
+//Private methods
+void Motion::setVelRaw(Direction r, int pwmr, Direction l, int pwml){
+	//Actually set things to the motor 
+	bool r_d;
+	bool l_d;
+	//Actually set things to the motor
+	if(r == Direction::forward){
+		r_d = true;
+	} else{
+		r_d = false;
+	}
 	
-}
-
-void Motion::control_deploy_ramps()
-{
+	//Actually set things to the motor
+	if(l == Direction::forward){
+		l_d = true;
+	} else{
+		l_d = false;
+	}
 	
+	motor_r.SetRaw(r_d, pwmr);
+	motor_l.SetRaw(l_d, pwml);
+	//motor_lf.Set(0.0, EnRead2() * 1000000 * MM_PER_STEP / 1000);
 }
