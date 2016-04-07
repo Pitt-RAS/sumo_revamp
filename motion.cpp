@@ -49,7 +49,7 @@ void Motion::deploy_ramps()
 {
 	//movement_state = MovementType::deploy_ramps;
 	
-	setVel(0, 30);//Spin
+	setVel(0, 512);//Spin
 	delay(500); //Delay
 	setVel(0, 0); //Stop
 }
@@ -103,10 +103,10 @@ void Motion::setVel(float v, float w){
 	//Set the PID controllers to the v that is being targeted
 	//For now just fudge it!
 	
-	int pwml = abs(vl) * (1023/1.0);
+	int pwml = abs(vl);
 	if(pwml > 1023)	
 		pwml = 1023;
-	int pwmr = abs(vr) * (1023/1.0);
+	int pwmr = abs(vr);
 	if(pwmr > 1023)	
 		pwmr = 1023;
 

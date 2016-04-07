@@ -20,9 +20,12 @@ int proximity_sensors_rear_weight[5] = {-90,         -45,         0,           4
 ProxSense frontProx(proximity_sensors_front, proximity_sensors_front_weight);
 ProxSense rearProx(proximity_sensors_rear, proximity_sensors_rear_weight);
 
+//Initialize motion control object
+Motion sumo;
+
 //Todo: initialize line sensor objects
 
-Orientation* mpu = Orientation::getInstance();
+//Orientation* mpu = Orientation::getInstance();
 
 void setup() {
 	
@@ -77,7 +80,7 @@ void setup() {
  
  //Set Serial Baud for debugging
   Serial.begin(BAUD);
-
+  
   // PWM resolution is 0-1023.
   analogWriteResolution(PWM_SPEED_BITS);
   
@@ -93,17 +96,14 @@ void setup() {
   
 }
 
-
-//Regular code
-#ifndef HARDWARE_TEST
 void loop() {
+  Serial.println("Looping new");
+  sumo.charge(512);
+  delay(1000);
 
+  sumo.charge(-512);
+  delay(1000);
+
+  sumo.charge(0);  
+  delay(4000);
 }
-#endif
-
-//Hardware test code
-#ifdef HARDWARE_TEST
-void loop() {
-
-}
-#endif
