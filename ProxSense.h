@@ -13,6 +13,7 @@ public:
 	void update();
 	int generateAngle();
 	bool sensorHigh();
+	int readAngle();
  };
  
  #endif 

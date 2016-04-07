@@ -147,4 +147,6 @@
 #define MAX_VEL_ROTATE 0.1 // m/s
 #define MAX_VEL_CORNER .5 // m/s
 
+#define PROXIMITY_INACTIVE 9999999
+
 #endif
