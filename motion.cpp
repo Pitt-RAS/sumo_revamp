@@ -6,7 +6,6 @@ Motion::Motion()
 	pid_left (KP_POSITION, KI_POSITION, KD_POSITION),
 	pid_right (KP_POSITION, KI_POSITION, KD_POSITION)
 {
-	movement_state = stop;
 
   //Setup the interrupt to call update
 }
@@ -38,25 +37,22 @@ void Motion::deploy_ramps()
 
 void Motion::setVel(float v, float w){
 	//Do work to calculate individual motor velocities from angular acceleration and centerline velocity
-	Direction directionl, directionr;
-
-	
-	
 	float vl = v + ((PI * DISTANCE_BETWEEN_WHEELS * w)/2.0); //Replace with trig to calculate the desired wheel speed.
 	float vr = v - ((PI * DISTANCE_BETWEEN_WHEELS * w)/2.0); //Replace with trig to calculate the deisred wheel speed.
 	
+	bool directionl, directionr;
 	if(vl >= 0){
-		directionl = Direction::forward;
+		directionl = true;
 	}
 	else{
-		directionl = Direction::backward;
+		directionl = false;
 	}
 	
 	if(vr >= 0){
-		directionr = Direction::forward;
+		directionr = true;
 	}
 	else{
-		directionr = Direction::backward;
+		directionr = false;
 	}
 	
 	//Set the PID controllers to the v that is being targeted
@@ -74,25 +70,7 @@ void Motion::setVel(float v, float w){
 }
 
 //Private methods
-void Motion::setVelRaw(Direction r, int pwmr, Direction l, int pwml){
-	//Actually set things to the motor 
-	bool r_d;
-	bool l_d;
-	//Actually set things to the motor
-	if(r == Direction::forward){
-		r_d = true;
-	} else{
-		r_d = false;
-	}
-	
-	//Actually set things to the motor
-	if(l == Direction::forward){
-		l_d = true;
-	} else{
-		l_d = false;
-	}
-	
-	motor_r.SetRaw(r_d, pwmr);
-	motor_l.SetRaw(l_d, pwml);
-	//motor_lf.Set(0.0, EnRead2() * 1000000 * MM_PER_STEP / 1000);
+void Motion::setVelRaw(bool r, int pwmr, bool l, int pwml) {
+	motor_r.SetRaw(r, pwmr);
+	motor_l.SetRaw(l, pwml);
 }
