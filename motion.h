@@ -25,14 +25,14 @@ private:
 	void setVelRaw(Direction r, int pwmr, Direction l, int pwml);
 	void setVel(float v, float w);
 	
-	void control_charge(int velocity);
-	void control_search_arc(int velocity, int rotation);
+	void control_charge();
+	void control_search_arc();
 	void control_deploy_ramps();
 
 public:
   Motion();
-	void charge();
-	void search_arc();
+	void charge(int velocity);
+	void search_arc(int velocity, int rotation);
 	void deploy_ramps();
 	
 	//Must be called a set rate
