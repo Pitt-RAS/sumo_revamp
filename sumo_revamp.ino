@@ -98,15 +98,15 @@ void setup() {
 
 void loop() {
   Serial.println("Looping new");
-  /*sumo.charge(512);
+  sumo.setVel(0, 10);
   delay(1000);
 
-  sumo.charge(-512);
+  sumo.setVel(0, 10);
   delay(1000);
 
-  sumo.charge(0);  
-  delay(4000);*/
-  
+  sumo.setVel(0);  
+  delay(4000);
+  /*
 	//Read sensors
 	int prox_front_error = frontProx.readAngle();
 	int prox_rear_error = rearProx.readAngle();
@@ -117,7 +117,7 @@ void loop() {
 	Serial.print("    ");
 	Serial.print("rear:");
 	Serial.println(prox_rear_error);
-	
+	*/
 	/*
 	//WIP all signs will need to be set through testing
 	//These constants should be in config.h, however for now they will be here until the signs are all set.

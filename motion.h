@@ -22,8 +22,9 @@ private:
 public:
   Motion();
   	void setVel(float v, float w);
-	void charge(int velocity);
-	void search_arc(int velocity, int rotation);
+	void setVel(float v);
+	void charge();
+	void search_arc();
 	void deploy_ramps();
 	
 	//Must be called a set rate

@@ -16,14 +16,14 @@ void Motion::update()
 	//Compare current velocities to desired, using PID loop to calculate the new the settings to send to setVelRaw();
 }
 //Public state setting methods
-void Motion::charge(int velocity)
+void Motion::charge()
 {
-	setVel(velocity, 0); //Go forward not rotation
+	setVel(CHARGE_VELOCITY, 0); //Go forward not rotation
 }
 
-void Motion::search_arc(int velocity, int rotation)
+void Motion::search_arc()
 {
-	setVel(velocity, rotation); //10 m/s, 10rad/s rotation
+	setVel(SEARCH_ARC_VELOCITY, SEARCH_ARC_ROTATION); //10 m/s, 10rad/s rotation
 }
 
 void Motion::deploy_ramps()
@@ -33,6 +33,10 @@ void Motion::deploy_ramps()
 	setVel(0, 512);//Spin
 	delay(500); //Delay
 	setVel(0, 0); //Stop
+}
+
+void Motion::setVel(float v){
+	setVel(v, 0);
 }
 
 void Motion::setVel(float v, float w){
