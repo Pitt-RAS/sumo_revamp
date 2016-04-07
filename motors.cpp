@@ -47,3 +47,13 @@ void Motor::Set(float accel, float current_velocity) {
   digitalWrite(pin_, pin_state ^ forward_state_ ^ 1);
   analogWrite(pin_pwm_, speed_raw);
 }
+
+void Motor::SetRaw(bool forward, int speed_raw) {
+	if(forward){
+		digitalWrite(pin_, HIGH);
+	}
+	else {
+		digitalWrite(pin_, LOW);
+	}
+	analogWrite(pin_pwm_, speed_raw);
+}

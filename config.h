@@ -124,6 +124,9 @@
 //#define MAX_ACCEL_CORNER 3 // m/s/s  
 //#define MAX_DECEL_CORNER -3 // m/s/s
 
+#define DISTANCE_BETWEEN_WHEELS (90.0/1000.0) //90mm
+#define PI 3.14
+
 
 <<<<<<< HEAD
 #define GEAR_RATIO 29.86 // gear ratio between motor and wheels

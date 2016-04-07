@@ -33,16 +33,16 @@ void Motion::update()
 	}*/
 }
 //Public state setting methods
-void Motion::charge()
+void Motion::charge(int velocity)
 {
 	//movement_state = MovementType::charge
-	setVel(10, 0); //Go forward not rotation
+	setVel(velocity, 0); //Go forward not rotation
 }
 
-void Motion::search_arc()
+void Motion::search_arc(int velocity, int rotation)
 {
 	//movement_state = MovementType::search_arc;
-	setVel(10, 10); //10 m/s, 10rad/s rotation
+	setVel(velocity, rotation); //10 m/s, 10rad/s rotation
 }
 
 void Motion::deploy_ramps()
@@ -56,6 +56,25 @@ void Motion::deploy_ramps()
 //Private methods
 void Motion::setVelRaw(Direction r, int pwmr, Direction l, int pwml){
 	//Actually set things to the motor 
+	bool r_d;
+	bool l_d;
+	//Actually set things to the motor
+	if(r == Direction::forward){
+		r_d = true;
+	} else{
+		r_d = false;
+	}
+	
+	//Actually set things to the motor
+	if(l == Direction::forward){
+		l_d = true;
+	} else{
+		l_d = false;
+	}
+	
+	motor_r.SetRaw(r_d, pwmr);
+	motor_l.SetRaw(l_d, pwml);
+	//motor_lf.Set(0.0, EnRead2() * 1000000 * MM_PER_STEP / 1000);
 }
 
 void Motion::setVel(float v, float w){
@@ -67,14 +86,14 @@ void Motion::setVel(float v, float w){
 	float vl = v + ((PI * DISTANCE_BETWEEN_WHEELS * w)/2.0); //Replace with trig to calculate the desired wheel speed.
 	float vr = v - ((PI * DISTANCE_BETWEEN_WHEELS * w)/2.0); //Replace with trig to calculate the deisred wheel speed.
 	
-	if(vl > 0){
+	if(vl >= 0){
 		directionl = Direction::forward;
 	}
 	else{
 		directionl = Direction::backward;
 	}
 	
-	if(vr > 0){
+	if(vr >= 0){
 		directionr = Direction::forward;
 	}
 	else{
@@ -84,8 +103,12 @@ void Motion::setVel(float v, float w){
 	//Set the PID controllers to the v that is being targeted
 	//For now just fudge it!
 	
-	int pwml = abs(vl) * (1024/1.0);
-	int pwmr = abs(vr) * (1024/1.0);
+	int pwml = abs(vl) * (1023/1.0);
+	if(pwml > 1023)	
+		pwml = 1023;
+	int pwmr = abs(vr) * (1023/1.0);
+	if(pwmr > 1023)	
+		pwmr = 1023;
 
 	//For now just set the pwm values
 	setVelRaw(directionr, pwml, directionl, pwmr);
