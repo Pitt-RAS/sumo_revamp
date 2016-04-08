@@ -143,8 +143,9 @@ void loop() {
 
 #ifdef TEST_DRIVER
 
-#define TEST_PROX
-//#define TEST_MOTORS_ENC
+//#define TEST_PROX
+#define TEST_MOTORS_ENC
+//#define TEST_LINE_SENSORS
 
 void loop() {
 	
@@ -171,9 +172,9 @@ void loop() {
 	Serial.print("FL: ");
 	Serial.print(EnVelocityFL());
 	Serial.print(" FR: ");
-	Serial.print(EnVelocityFL());
+	Serial.print(EnVelocityFR());
 	Serial.print(" BL: ");
-	Serial.print(EnVelocityFL());
+	Serial.print(EnVelocityBL());
 	Serial.print(" BR: ");
 	Serial.print(EnVelocityBR());
 	delay(100);
@@ -188,14 +189,27 @@ void loop() {
 	Serial.print("FL: ");
 	Serial.print(EnVelocityFL());
 	Serial.print(" FR: ");
-	Serial.print(EnVelocityFL());
+	Serial.print(EnVelocityFR());
 	Serial.print(" BL: ");
-	Serial.print(EnVelocityFL());
+	Serial.print(EnVelocityBL());
 	Serial.print(" BR: ");
 	Serial.print(EnVelocityBR());
 	delay(100);
 	sumo.setVel(0);
 	delay(2000);
+#endif
+
+#ifdef TEST_LINE_SENSORS
+  Serial.print("FL: ");
+  Serial.print(digitalRead(FL_LINESENSE_PIN));
+  Serial.print(" FR: ");
+  Serial.print(digitalRead(FR_LINESENSE_PIN));
+  Serial.print(" BL: ");
+  Serial.print(digitalRead(BL_LINESENSE_PIN));
+  Serial.print(" BR: ");
+  Serial.println(digitalRead(BR_LINESENSE_PIN));
+  delay(10);  //Slight delay for the console
+
 #endif
 
 }
