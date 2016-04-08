@@ -97,13 +97,15 @@ void setup() {
   analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
   
   //Button Press
+  sumo.setVel(0, 0.2 );
   while (digitalRead(BUTTON_PIN)){
 	    Serial.println("butttonn!");
+		sumo.update();
 		delay(10);
 
   }
   delay(3000);
-    sumo.deploy_ramps();
+  sumo.deploy_ramps();
 
   //delay(4000);
   //Serial.println("button");
@@ -135,22 +137,32 @@ void loop() {
 	Serial.println(prox_rear_error);
 	
 	prox_rear_error = PROXIMITY_INACTIVE;
-	//prox_front_error = PROXIMITY_INACTIVE;
+	prox_front_error = PROXIMITY_INACTIVE;
 
 	//WIP all signs will need to be set through testing
 	//These constants should be in config.h, however for now they will be here until the signs are all set.
-	float CHARGE_VEL = 1.0;
+	static float CHARGE_VEL = 1.0;
+	static float CURRENT_VEL = CHARGE_VEL;
+	static bool CURRENT_VEL_DIRECTION = true; //true = forward false = backward
 	float FUDGE_FACTOR = -(3.0/90.0);
 	delay(1);
 	//Set possible movements
 	//Prioritize the front over the rear
 	if(!FL_Line || !FR_Line)
 	{
-		sumo.setVel(-CHARGE_VEL,0);
+		if(CURRENT_VEL_DIRECTION){
+			CURRENT_VEL = -CURRENT_VEL;
+			CURRENT_VEL_DIRECTION = false;
+		}
+		sumo.setVel(CURRENT_VEL,0);
 	}
 	else if(!BL_Line || !BR_Line)
 	{
-		sumo.setVel(CHARGE_VEL,0);
+		if(!CURRENT_VEL_DIRECTION){
+			CURRENT_VEL = -CURRENT_VEL;
+			CURRENT_VEL_DIRECTION = true;
+		}
+		sumo.setVel(CURRENT_VEL,0);
 	}
 	else if(prox_front_error != PROXIMITY_INACTIVE){
 		sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
@@ -159,7 +171,7 @@ void loop() {
 		sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
 	}
 	else {
-		sumo.search_arc();
+		sumo.setVel(CURRENT_VEL, 0.2);
 	}
 	sumo.update();
 
