@@ -25,6 +25,10 @@ void Motion::update()
 
 	int lpwm = pid_left.Calculate(left_v, target_left_v);
 	int rpwm = pid_right.Calculate(right_v, target_right_v);
+	/*Serial.print("rpwm: ");
+	Serial.print(rpwm);
+	Serial.print("lpwm: ");
+	Serial.println(lpwm);*/
 	setVelRaw(rpwm, lpwm);
 }
 //Public state setting methods
@@ -35,16 +39,23 @@ void Motion::charge()
 
 void Motion::search_arc()
 {
-	setVel(SEARCH_ARC_VELOCITY, SEARCH_ARC_ROTATION); //10 m/s, 10rad/s rotation
+	setVel(1.0, 0.2); //10 m/s, 10rad/s rotation
 }
 
 void Motion::deploy_ramps()
 {
 	//movement_state = MovementType::deploy_ramps;
 	
-	setVel(0, 512);//Spin
-	delay(500); //Delay
+	setVel(0, -5);//Spin
+	for(int i = 0; i < 150; i++){
+		update();
+		delay(1);
+	}
 	setVel(0, 0); //Stop
+	for(int i = 0; i < 1000; i++){
+		update();
+		delay(1);
+	}
 }
 
 void Motion::setVel(float v){
