@@ -9,57 +9,57 @@ Encoder blEn(BL_ENCODERA_PIN, BL_ENCODERB_PIN); //Back Left Encoder (3)
 Encoder brEn(BR_ENCODERA_PIN, BR_ENCODERB_PIN); //Back Right Encoder (4)
 
 //Returns the value of the selected encoder
-float EnRead1(){
+float EnReadFL(){
 		return(flEn.read() * MM_PER_STEP);
 }
-float EnRead2(){
+float EnReadFR(){
 		return(frEn.read() * MM_PER_STEP);
 }
-float EnRead3(){
+float EnReadBL(){
 		return(blEn.read() * MM_PER_STEP);
 }
-float EnRead4(){
+float EnReadBR(){
 		return(brEn.read() * MM_PER_STEP);
 }
 
 //Writes value to the selected encoder
-void EnWrite1(float new_position){
+void EnWriteFL(float new_position){
 		flEn.write( (int32_t)rint(new_position / MM_PER_STEP));
 }
-void EnWrite2(float new_position){
+void EnWriteFR(float new_position){
 		frEn.write( (int32_t)rint(new_position / MM_PER_STEP));
 }
-void EnWrite3(float new_position){
+void EnWriteBL(float new_position){
 		blEn.write( (int32_t)rint(new_position / MM_PER_STEP));
 }
-void EnWrite4(float new_position){
+void EnWriteBR(float new_position){
 		brEn.write( (int32_t)rint(new_position / MM_PER_STEP));
 }
 
 //Returns veloctiy of selected encoder
-float EnVelocity1(){
+float EnVelocityFL(){
 	 return (1000 * flEn.stepRate() * MM_PER_STEP);
 }
-float EnVelocity2(){
+float EnVelocityFR(){
 	 return (1000 * frEn.stepRate() * MM_PER_STEP);
 }
-float EnVelocity3(){
+float EnVelocityBL(){
 	 return (1000 * blEn.stepRate() * MM_PER_STEP);
 }
-float EnVelocity4(){
+float EnVelocityBR(){
 	 return (1000 * brEn.stepRate() * MM_PER_STEP);
 }
 
 //Returns extrapolation of the selected encoder
-float EnExtrapolate1(){
+float EnExtrapolateFL(){
 	return (flEn.extrapolate() * MM_PER_STEP);
 }
-float EnExtrapolate2(){
+float EnExtrapolateFR(){
 	return (frEn.extrapolate() * MM_PER_STEP);
 }
-float EnExtrapolate3(){
+float EnExtrapolateBL(){
 	return (blEn.extrapolate() * MM_PER_STEP);
 }
-float EnExtrapolate4(){
+float EnExtrapolateBR(){
 	return (brEn.extrapolate() * MM_PER_STEP);
 }

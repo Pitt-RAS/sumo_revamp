@@ -11,6 +11,9 @@
 #include "Logger.h"
 #include "motion.h"
 
+//Turn on off test driver
+#define TEST_DRIVER
+
 //Create proximity sensor pin array initailize proximity sensors
 int proximity_sensors_front[5]        = {F_PROX1_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_PIN};
 int proximity_sensors_front_weight[5] = {-90,         -45,         0,           45,          90};
@@ -96,12 +99,13 @@ void setup() {
   
 }
 
+#ifndef TEST_DRIVER
 void loop() {
   Serial.println("Looping new");
-  sumo.setVel(0, 10);
+  sumo.setVel(0, 1);
   delay(1000);
 
-  sumo.setVel(0, 10);
+  sumo.setVel(0, -1);
   delay(1000);
 
   sumo.setVel(0);  
@@ -134,3 +138,65 @@ void loop() {
 	*/
 
 }
+#endif
+
+
+#ifdef TEST_DRIVER
+
+#define TEST_PROX
+//#define TEST_MOTORS_ENC
+
+void loop() {
+	
+#ifdef TEST_PROX
+	Serial.print("front: ");
+	for(int ii = 0; ii < 5; ii++)
+	{
+		Serial.print(digitalRead(proximity_sensors_front[ii]));
+	}
+	Serial.print("    back:");
+	
+	for(int ii = 0; ii < 5; ii++)
+	{
+		Serial.print(digitalRead(proximity_sensors_rear[ii]));
+	}
+	Serial.println();
+#endif
+
+#ifdef TEST_MOTORS_ENC
+	//Motors should go forward, all encoders give positive velocities
+	Serial.println("forward");
+	sumo.setVel(512);
+	delay(500);
+	Serial.print("FL: ");
+	Serial.print(EnVelocityFL());
+	Serial.print(" FR: ");
+	Serial.print(EnVelocityFL());
+	Serial.print(" BL: ");
+	Serial.print(EnVelocityFL());
+	Serial.print(" BR: ");
+	Serial.print(EnVelocityBR());
+	delay(100);
+	sumo.setVel(0);
+	delay(2000);
+
+	
+	//Motors should go backward, all encoders give positive velocities
+	Serial.println("backward");
+	sumo.setVel(-512);
+	delay(500);
+	Serial.print("FL: ");
+	Serial.print(EnVelocityFL());
+	Serial.print(" FR: ");
+	Serial.print(EnVelocityFL());
+	Serial.print(" BL: ");
+	Serial.print(EnVelocityFL());
+	Serial.print(" BR: ");
+	Serial.print(EnVelocityBR());
+	delay(100);
+	sumo.setVel(0);
+	delay(2000);
+#endif
+
+}
+#endif

@@ -41,8 +41,15 @@ void Motion::setVel(float v){
 
 void Motion::setVel(float v, float w){
 	//Do work to calculate individual motor velocities from angular acceleration and centerline velocity
-	float vl = v + ((PI * DISTANCE_BETWEEN_WHEELS * w)/2.0); //Replace with trig to calculate the desired wheel speed.
-	float vr = v - ((PI * DISTANCE_BETWEEN_WHEELS * w)/2.0); //Replace with trig to calculate the deisred wheel speed.
+	float vl = v + ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * w)/2.0); //Replace with trig to calculate the desired wheel speed.
+	float vr = v - ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * w)/2.0); //Replace with trig to calculate the deisred wheel speed.
+	
+	Serial.print("v:");
+	Serial.print(v);
+	Serial.print("vl:");
+	Serial.print(vl);
+	Serial.print("vr:");
+	Serial.print(vr);
 	
 	bool directionl, directionr;
 	if(vl >= 0){
@@ -68,6 +75,11 @@ void Motion::setVel(float v, float w){
 	int pwmr = abs(vr);
 	if(pwmr > 1023)	
 		pwmr = 1023;
+	
+	Serial.print("   pwml:");
+	Serial.print(pwml);
+	Serial.print("pwmr:");
+	Serial.println(pwmr);
 
 	//For now just set the pwm values
 	setVelRaw(directionr, pwml, directionl, pwmr);
