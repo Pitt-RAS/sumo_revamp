@@ -12,7 +12,7 @@
 #include "motion.h"
 
 //Turn on off test driver
-#define TEST_DRIVER
+//#define TEST_DRIVER
 
 //Create proximity sensor pin array initailize proximity sensors
 int proximity_sensors_front[5]        = {F_PROX1_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_PIN};
@@ -26,7 +26,11 @@ ProxSense rearProx(proximity_sensors_rear, proximity_sensors_rear_weight);
 //Initialize motion control object
 Motion sumo;
 
-//Todo: initialize line sensor objects
+//Set Line Sensor Variables
+bool FL_Line;
+bool FR_Line;
+bool BL_Line;
+bool BR_Line;
 
 //Orientation* mpu = Orientation::getInstance();
 
@@ -75,7 +79,7 @@ void setup() {
   digitalWrite(SIGNAL_LED_PIN, 0);
   pinMode(BUZZER_PIN, OUTPUT);
   analogWrite(BUZZER_PIN, 0);
-  pinMode(BUTTON_PIN, INPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
   pinMode(IMU_INTERRUPT_PIN, INPUT);
   
   
@@ -97,19 +101,33 @@ void setup() {
   analogWriteFrequency(L_MOTOR_PWM_PIN, 46875);
   analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
   
+  //Button Press
+  bool buttonVal
+  while (buttonVal)
+  {
+  	buttonVal = digitalRead(BUTTON_PIN);
+  }
+  delay(5000);
 }
 
 #ifndef TEST_DRIVER
 void loop() {
   Serial.println("Looping new");
+  FL_Line = digitalRead(FL_LINESENSE_PIN);
+  FR_LINE = digitalRead(FR_LINESENSE_PIN);
+  BR_LINE = digitalRead(BR_LINESENSE_PIN);
+  BL_LINE = digitalRead(BL_LINESENSE_PIN);
   sumo.setVel(0, 1);
-  delay(1000);
-
-  sumo.setVel(0, -1);
-  delay(1000);
-
-  sumo.setVel(0);  
-  delay(4000);
+  
+  if(FL_Line || FR_Line)
+  {
+  	sumo.setVal(0,-1);
+  }
+  if(BL_Line || BR_Line)
+  {
+  	sumo.setVal(0,1);
+  }
+  
   /*
 	//Read sensors
 	int prox_front_error = frontProx.readAngle();
