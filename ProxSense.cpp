@@ -23,10 +23,10 @@ int ProxSense::generateAngle()
 	int numActive = 0;
 	for(int ii = 0; ii < 5; ii++)
 	{
-		if(prox[ii]){
+		if(!prox[ii]){
 			numActive++;
+			sum += weight[ii];
 		}
-		sum = sum + prox[ii] * weight[ii];
 	}
 	
 	if(numActive > 0){

@@ -3,9 +3,9 @@
 
 #include "Arduino.h"
 #include "config.h"
-#include "encoding.h"
 #include "motors.h"
 #include "PIDController.h"
+#include <EncoderMod.h>
 
 class Motion
 {
@@ -15,9 +15,16 @@ private:
 	
 	PIDController pid_left;
 	PIDController pid_right;
+	
+	Encoder flEn; //Front Left Encoder (1)
+	Encoder frEn; //Front Right Encoder (2)
+	Encoder blEn; //Back Left Encoder (3)
+	Encoder brEn; //Back Right Encoder (4)
 
+	float target_left_v, target_right_v;
 	//Private motion functions
 	void setVelRaw(bool r, int pwmr, bool l, int pwml);
+	void setVelRaw(int pwmr, int pwml);
 
 public:
   Motion();
@@ -29,6 +36,12 @@ public:
 	
 	//Must be called a set rate
 	void update();
+	
+	//Returns veloctiy of selected encoder
+	float EnVelocityFL();
+	float EnVelocityFR();
+	float EnVelocityBL();
+	float EnVelocityBR();
 
  };
  

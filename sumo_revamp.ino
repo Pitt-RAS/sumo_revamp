@@ -1,13 +1,12 @@
 #include <Arduino.h>
 
 #include "config.h"
-#include "encoding.h"
 #include "motors.h"
 #include "ProxSense.h"
 #include "sensors_orientation.h"
 #include <EncoderMod.h>
 #include "I2Cdev.h"
-#include "MPU9150.h"
+#include "MPU9150.h" 
 #include "Logger.h"
 #include "motion.h"
 
@@ -25,12 +24,6 @@ ProxSense rearProx(proximity_sensors_rear, proximity_sensors_rear_weight);
 
 //Initialize motion control object
 Motion sumo;
-
-//Set Line Sensor Variables
-bool FL_Line;
-bool FR_Line;
-bool BL_Line;
-bool BR_Line;
 
 //Orientation* mpu = Orientation::getInstance();
 
@@ -56,6 +49,7 @@ void setup() {
   pinMode(R_PROX4_PIN, INPUT);
   pinMode(R_PROX5_PIN, INPUT);
   
+  /*
   //Encoder Pins
   pinMode(FL_ENCODERB_PIN, INPUT);
   pinMode(FL_ENCODERA_PIN, INPUT);
@@ -65,6 +59,7 @@ void setup() {
   pinMode(BL_ENCODERB_PIN, INPUT);
   pinMode(FR_ENCODERA_PIN, INPUT);
   pinMode(BR_ENCODERB_PIN, INPUT);
+  */
   
   //Motor Pins
   pinMode(L_MOTOR_DIR_PIN, OUTPUT);
@@ -102,33 +97,22 @@ void setup() {
   analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
   
   //Button Press
-  bool buttonVal
-  while (buttonVal)
-  {
-  	buttonVal = digitalRead(BUTTON_PIN);
-  }
-  delay(5000);
+  //while (digitalRead(BUTTON_PIN));
+  //delay(5000);
 }
 
 #ifndef TEST_DRIVER
 void loop() {
-  Serial.println("Looping new");
-  FL_Line = digitalRead(FL_LINESENSE_PIN);
-  FR_LINE = digitalRead(FR_LINESENSE_PIN);
-  BR_LINE = digitalRead(BR_LINESENSE_PIN);
-  BL_LINE = digitalRead(BL_LINESENSE_PIN);
-  sumo.setVel(0, 1);
-  
-  if(FL_Line || FR_Line)
-  {
-  	sumo.setVal(0,-1);
-  }
-  if(BL_Line || BR_Line)
-  {
-  	sumo.setVal(0,1);
-  }
-  
+  //Serial.println("Looping new");
+  bool FL_Line = digitalRead(FL_LINESENSE_PIN);
+  bool FR_Line = digitalRead(FR_LINESENSE_PIN);
+  bool BR_Line = digitalRead(BR_LINESENSE_PIN);
+  bool BL_Line = digitalRead(BL_LINESENSE_PIN);
+  //sumo.setVel(0, 1);
   /*
+
+  */
+  
 	//Read sensors
 	int prox_front_error = frontProx.readAngle();
 	int prox_rear_error = rearProx.readAngle();
@@ -139,21 +123,35 @@ void loop() {
 	Serial.print("    ");
 	Serial.print("rear:");
 	Serial.println(prox_rear_error);
-	*/
-	/*
+	
+	//prox_rear_error = PROXIMITY_INACTIVE;
+	prox_front_error = PROXIMITY_INACTIVE;
+
 	//WIP all signs will need to be set through testing
 	//These constants should be in config.h, however for now they will be here until the signs are all set.
-	int CHARGE_VEL = 512;
-	int FUDGE_FACTOR = 1;
+	int CHARGE_VEL = 250;
+	float FUDGE_FACTOR = -0.1;
+	delay(100);
 	//Set possible movements
 	//Prioritize the front over the rear
+	/*if(FL_Line || FR_Line)
+	{
+		sumo.setVel(-512,0);
+	}
+	else if(BL_Line || BR_Line)
+	{
+		sumo.setVel(512,0);
+	}*/
 	if(prox_front_error != PROXIMITY_INACTIVE){
 		sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
 	}
 	else if(prox_rear_error != PROXIMITY_INACTIVE){
-		sumo.setVel(-CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
+		sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
 	}
-	*/
+	else {
+		sumo.setVel(0);
+	}
+	
 
 }
 #endif
@@ -161,12 +159,11 @@ void loop() {
 
 #ifdef TEST_DRIVER
 
-//#define TEST_PROX
-#define TEST_MOTORS_ENC
+#define TEST_PROX
+//#define TEST_MOTORS_ENC
 //#define TEST_LINE_SENSORS
 
 void loop() {
-	
 #ifdef TEST_PROX
 	Serial.print("front: ");
 	for(int ii = 0; ii < 5; ii++)
@@ -184,34 +181,33 @@ void loop() {
 
 #ifdef TEST_MOTORS_ENC
 	//Motors should go forward, all encoders give positive velocities
-	Serial.println("forward");
+	Serial.print("forward   ");
 	sumo.setVel(512);
-	delay(500);
+	delay(1000);
 	Serial.print("FL: ");
-	Serial.print(EnVelocityFL());
+	Serial.print(sumo.EnVelocityFL());
 	Serial.print(" FR: ");
-	Serial.print(EnVelocityFR());
+	Serial.print(sumo.EnVelocityFR());
 	Serial.print(" BL: ");
-	Serial.print(EnVelocityBL());
+	Serial.print(sumo.EnVelocityBL());
 	Serial.print(" BR: ");
-	Serial.print(EnVelocityBR());
+	Serial.println(sumo.EnVelocityBR());
 	delay(100);
 	sumo.setVel(0);
 	delay(2000);
 
-	
 	//Motors should go backward, all encoders give positive velocities
-	Serial.println("backward");
+	Serial.print("backward   ");
 	sumo.setVel(-512);
-	delay(500);
+	delay(1000);
 	Serial.print("FL: ");
-	Serial.print(EnVelocityFL());
+	Serial.print(sumo.EnVelocityFL());
 	Serial.print(" FR: ");
-	Serial.print(EnVelocityFR());
+	Serial.print(sumo.EnVelocityFR());
 	Serial.print(" BL: ");
-	Serial.print(EnVelocityBL());
+	Serial.print(sumo.EnVelocityBL());
 	Serial.print(" BR: ");
-	Serial.print(EnVelocityBR());
+	Serial.println(sumo.EnVelocityBR());
 	delay(100);
 	sumo.setVel(0);
 	delay(2000);
