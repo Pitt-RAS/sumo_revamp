@@ -124,14 +124,14 @@ void loop() {
 	Serial.print("rear:");
 	Serial.println(prox_rear_error);
 	
-	//prox_rear_error = PROXIMITY_INACTIVE;
-	prox_front_error = PROXIMITY_INACTIVE;
+	prox_rear_error = PROXIMITY_INACTIVE;
+	//prox_front_error = PROXIMITY_INACTIVE;
 
 	//WIP all signs will need to be set through testing
 	//These constants should be in config.h, however for now they will be here until the signs are all set.
-	int CHARGE_VEL = 250;
-	float FUDGE_FACTOR = -0.1;
-	delay(100);
+	float CHARGE_VEL = 0.0;
+	float FUDGE_FACTOR = -(3.0/90.0);
+	delay(1);
 	//Set possible movements
 	//Prioritize the front over the rear
 	/*if(FL_Line || FR_Line)
@@ -151,7 +151,7 @@ void loop() {
 	else {
 		sumo.setVel(0);
 	}
-	
+	sumo.update();
 
 }
 #endif
@@ -159,8 +159,8 @@ void loop() {
 
 #ifdef TEST_DRIVER
 
-#define TEST_PROX
-//#define TEST_MOTORS_ENC
+//#define TEST_PROX
+#define TEST_MOTORS_ENC
 //#define TEST_LINE_SENSORS
 
 void loop() {
@@ -182,7 +182,7 @@ void loop() {
 #ifdef TEST_MOTORS_ENC
 	//Motors should go forward, all encoders give positive velocities
 	Serial.print("forward   ");
-	sumo.setVel(512);
+	sumo.setVelRaw(512, 512);
 	delay(1000);
 	Serial.print("FL: ");
 	Serial.print(sumo.EnVelocityFL());
@@ -193,12 +193,12 @@ void loop() {
 	Serial.print(" BR: ");
 	Serial.println(sumo.EnVelocityBR());
 	delay(100);
-	sumo.setVel(0);
+	sumo.setVelRaw(0, 0);
 	delay(2000);
 
 	//Motors should go backward, all encoders give positive velocities
 	Serial.print("backward   ");
-	sumo.setVel(-512);
+	sumo.setVelRaw(-512, -512);
 	delay(1000);
 	Serial.print("FL: ");
 	Serial.print(sumo.EnVelocityFL());
@@ -209,7 +209,7 @@ void loop() {
 	Serial.print(" BR: ");
 	Serial.println(sumo.EnVelocityBR());
 	delay(100);
-	sumo.setVel(0);
+	sumo.setVelRaw(0, 0);
 	delay(2000);
 #endif
 

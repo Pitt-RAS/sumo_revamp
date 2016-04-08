@@ -12,14 +12,16 @@ Motion::Motion()
 {
 
   //Setup the interrupt to call update
+  target_left_v = 0;
+  target_right_v = 0;
 }
 
 void Motion::update()
 {
 	//Update PID controllers
 	//Compare current velocities to desired, using PID loop to calculate the new the settings to send to setVelRaw();
-	float left_v = (flEn.stepRate() + blEn.stepRate())/2.0;
-	float right_v = (frEn.stepRate() + brEn.stepRate())/2.0;
+	float left_v = ((flEn.stepRate() + blEn.stepRate())/2.0) * 1000.0 * MM_PER_STEP;
+	float right_v = ((frEn.stepRate() + brEn.stepRate())/2.0)  * 1000.0 * MM_PER_STEP;
 
 	int lpwm = pid_left.Calculate(left_v, target_left_v);
 	int rpwm = pid_right.Calculate(right_v, target_right_v);
@@ -54,6 +56,9 @@ void Motion::setVel(float v, float w){
 	//Do work to calculate individual motor velocities from angular acceleration and centerline velocity
 	float vl = v + ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * w)/2.0); //Replace with trig to calculate the desired wheel speed.
 	float vr = v - ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * w)/2.0); //Replace with trig to calculate the deisred wheel speed.
+	target_left_v = v + w;
+	target_right_v = v - w;
+	
 	/*
 	Serial.print("v:");
 	Serial.print(v);
@@ -61,7 +66,6 @@ void Motion::setVel(float v, float w){
 	Serial.print(vl);
 	Serial.print("vr:");
 	Serial.print(vr);
-	*/
 	bool directionl, directionr;
 	if(vl >= 0){
 		directionl = true;
@@ -86,14 +90,13 @@ void Motion::setVel(float v, float w){
 	int pwmr = abs(vr);
 	if(pwmr > 1023)	
 		pwmr = 1023;
-	/*
 	Serial.print("   pwml:");
 	Serial.print(pwml);
 	Serial.print("pwmr:");
 	Serial.println(pwmr);
-	*/
-	//For now just set the pwm values
+	//or now just set the pwm values
 	setVelRaw(directionr, pwml, directionl, pwmr);
+	*/
 }
 
 //Returns veloctiy of selected encoder
@@ -117,9 +120,9 @@ void Motion::setVelRaw(int rpwm, int lpwm){
 		r = true;
 	}
 	else {
-		r =false;
+		r = false;
 	}
-	if(lpwm){
+	if(lpwm > 0){
 		l = true;
 	}
 	else {

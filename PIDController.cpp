@@ -26,9 +26,9 @@ float PIDController::Calculate(float current_value, float target_value) {
     last_value = current_value;
   }
 
+  
   float output = -kp * error - i_term + kd * (-current_value + last_value) / elapsed_time;
   last_value = current_value;
-
   elapsed_time = 0;
 
   return output;

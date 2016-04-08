@@ -103,13 +103,9 @@
 #define MM_PER_STEP 0.6444
 
 // PID tuning parameters
-#define KP_POSITION 5.69
+#define KP_POSITION (1024.0/1.0)
 #define KI_POSITION 0
 #define KD_POSITION 0
-
-#define KP_ROTATION 1
-#define KI_ROTATION 0
-#define KD_ROTATION 0
 
 // Robot characteristics
 #define ROBOT_MASS .500 // kilograms

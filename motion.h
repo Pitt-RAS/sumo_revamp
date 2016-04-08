@@ -24,10 +24,11 @@ private:
 	float target_left_v, target_right_v;
 	//Private motion functions
 	void setVelRaw(bool r, int pwmr, bool l, int pwml);
-	void setVelRaw(int pwmr, int pwml);
 
 public:
   Motion();
+  	void setVelRaw(int pwmr, int pwml);
+
   	void setVel(float v, float w);
 	void setVel(float v);
 	void charge();
