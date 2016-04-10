@@ -103,9 +103,9 @@
 #define MM_PER_STEP 0.6444
 
 // PID tuning parameters
-#define KP_POSITION (1024.0/1.0)
-#define KI_POSITION 0
-#define KD_POSITION 0
+#define KP_POSITION (1023.0/1.0) //Cause stronger responses to input data
+#define KI_POSITION 0 //0.01//((1024.0/1.0)/20.0) //How quickly to accumulate error
+#define KD_POSITION 0 //How quickly to slow down change in error
 
 // Robot characteristics
 #define ROBOT_MASS .500 // kilograms

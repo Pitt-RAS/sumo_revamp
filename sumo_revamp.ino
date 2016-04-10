@@ -97,20 +97,15 @@ void setup() {
   analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
   
   //Button Press
-  sumo.setVel(0, 0.2 );
+  //setVelRaw(-1024, 1024);
   while (digitalRead(BUTTON_PIN)){
-	    Serial.println("butttonn!");
+	    Serial.println("button!");
 		sumo.update();
 		delay(10);
 
   }
-  delay(3000);
+  delay(5000);
   sumo.deploy_ramps();
-
-  //delay(4000);
-  //Serial.println("button");
-  //Serial.println(digitalRead(BUTTON_PIN));
-  //delay(1000);
 }
 
 #ifndef TEST_DRIVER
@@ -120,35 +115,46 @@ void loop() {
   bool FR_Line = digitalRead(FR_LINESENSE_PIN);
   bool BR_Line = digitalRead(BR_LINESENSE_PIN);
   bool BL_Line = digitalRead(BL_LINESENSE_PIN);
-  //sumo.setVel(0, 1);
-  /*
-
-  */
   
 	//Read sensors
 	int prox_front_error = frontProx.readAngle();
 	int prox_rear_error = rearProx.readAngle();
 	
 	//For debugging
-	Serial.print("front:");
+	/*Serial.print("front:");
 	Serial.print(prox_front_error);
 	Serial.print("    ");
 	Serial.print("rear:");
 	Serial.println(prox_rear_error);
-	
-	prox_rear_error = PROXIMITY_INACTIVE;
-	prox_front_error = PROXIMITY_INACTIVE;
+	*/
+	//prox_rear_error = PROXIMITY_INACTIVE;
+	//prox_front_error = PROXIMITY_INACTIVE;
 
 	//WIP all signs will need to be set through testing
 	//These constants should be in config.h, however for now they will be here until the signs are all set.
-	static float CHARGE_VEL = 1.0;
+	static float CHARGE_VEL = 3.0;
 	static float CURRENT_VEL = CHARGE_VEL;
 	static bool CURRENT_VEL_DIRECTION = true; //true = forward false = backward
-	float FUDGE_FACTOR = -(3.0/90.0);
+	float FUDGE_FACTOR = -(3.0/90.0); //Makes turns faster or slower
 	delay(1);
 	//Set possible movements
 	//Prioritize the front over the rear
-	if(!FL_Line || !FR_Line)
+	if(!(FL_Line || FR_Line || BL_Line || BR_Line)){
+		sumo.setVel(0, 0);
+		//Stop 4ever
+		while(1){
+			sumo.update();
+			delay(1);
+		}
+	}
+	else if(prox_front_error != PROXIMITY_INACTIVE){
+		sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
+	}
+	else if(prox_rear_error != PROXIMITY_INACTIVE){
+		sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
+	} 
+	
+	else if(!FL_Line || !FR_Line) //Line Checking
 	{
 		if(CURRENT_VEL_DIRECTION){
 			CURRENT_VEL = -CURRENT_VEL;
@@ -164,16 +170,23 @@ void loop() {
 		}
 		sumo.setVel(CURRENT_VEL,0);
 	}
-	else if(prox_front_error != PROXIMITY_INACTIVE){
-		sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
+	else if(!FL_Line){
+		sumo.setVel(-0.5 * CHARGE_VEL, -3);
 	}
-	else if(prox_rear_error != PROXIMITY_INACTIVE){
-		sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
+	else if(!FR_Line){
+		sumo.setVel(-0.5 * CHARGE_VEL, 3);
 	}
+	else if(!BL_Line){
+		sumo.setVel(0.5 * CHARGE_VEL,  3);
+	}
+	else if(!BR_Line){
+		sumo.setVel(0.5 * CHARGE_VEL, -3);
+	}
+	
 	else {
-		sumo.setVel(CURRENT_VEL, 0.2);
+		sumo.setVel(CURRENT_VEL, 0.2 * (abs(CURRENT_VEL) / 1.0));
 	}
-	sumo.update();
+	sumo.update(); //Must be called so that PID loop gets updated
 
 }
 #endif
@@ -181,8 +194,8 @@ void loop() {
 
 #ifdef TEST_DRIVER
 
-//#define TEST_PROX
-#define TEST_MOTORS_ENC
+#define TEST_PROX
+//#define TEST_MOTORS_ENC
 //#define TEST_LINE_SENSORS
 
 void loop() {

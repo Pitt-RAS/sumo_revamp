@@ -20,15 +20,16 @@ void Motion::update()
 {
 	//Update PID controllers
 	//Compare current velocities to desired, using PID loop to calculate the new the settings to send to setVelRaw();
-	float left_v = ((flEn.stepRate() + blEn.stepRate())/2.0) * 1000.0 * MM_PER_STEP;
+	//float left_v = ((flEn.stepRate() + blEn.stepRate())/2.0) * 1000.0 * MM_PER_STEP;
+	float left_v = ((blEn.stepRate())) * 1000.0 * MM_PER_STEP;
 	float right_v = ((frEn.stepRate() + brEn.stepRate())/2.0)  * 1000.0 * MM_PER_STEP;
 
 	int lpwm = pid_left.Calculate(left_v, target_left_v);
 	int rpwm = pid_right.Calculate(right_v, target_right_v);
-	/*Serial.print("rpwm: ");
+	Serial.print("rpwm: ");
 	Serial.print(rpwm);
 	Serial.print("lpwm: ");
-	Serial.println(lpwm);*/
+	Serial.println(lpwm);
 	setVelRaw(rpwm, lpwm);
 }
 //Public state setting methods
@@ -44,18 +45,10 @@ void Motion::search_arc()
 
 void Motion::deploy_ramps()
 {
-	//movement_state = MovementType::deploy_ramps;
-	
-	setVel(0, -5);//Spin
-	for(int i = 0; i < 150; i++){
-		update();
-		delay(1);
-	}
-	setVel(0, 0); //Stop
-	for(int i = 0; i < 1000; i++){
-		update();
-		delay(1);
-	}
+	setVelRaw(1024, -1024);
+	delay(100); //Deploys the plows
+	setVelRaw(0, 0);
+	delay(200);
 }
 
 void Motion::setVel(float v){
@@ -139,7 +132,7 @@ void Motion::setVelRaw(int rpwm, int lpwm){
 	else {
 		l = false;
 	}
-	setVelRaw(r, abs(rpwm), l, abs(lpwm));
+	setVelRaw(r, abs(rpwm), l, abs(lpwm)); //Sets the velocity to be equal to the PWM if the PWM is positive
 }
 
 void Motion::setVelRaw(bool r, int pwmr, bool l, int pwml) {
