@@ -148,11 +148,13 @@ void loop() {
 		}
 	}
 	else if(prox_front_error != PROXIMITY_INACTIVE){
-		sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
+		//sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
+    sumo.setVel(0 , prox_front_error * FUDGE_FACTOR);
+
 	}
-	else if(prox_rear_error != PROXIMITY_INACTIVE){
+	/*else if(prox_rear_error != PROXIMITY_INACTIVE){
 		sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
-	} 
+	} */
 	
 	else if(!FL_Line || !FR_Line) //Line Checking
 	{
@@ -184,7 +186,9 @@ void loop() {
 	}
 	
 	else {
-		sumo.setVel(CURRENT_VEL, 0.2 * (abs(CURRENT_VEL) / 1.0));
+		//sumo.setVel(CURRENT_VEL, 0.2 * (abs(CURRENT_VEL) / 1.0));
+    sumo.setVel(0, 0);
+
 	}
 	sumo.update(); //Must be called so that PID loop gets updated
 
