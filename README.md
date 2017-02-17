@@ -16,3 +16,13 @@ Front Left = 1
 Front Right = 2
 Back Left = 3
 Back Right = 4
+
+## Teensy Setup:
+
+Follow the steps found here: https://www.pjrc.com/teensy/td_download.html
+
+Go here: https://www.pjrc.com/teensy/49-teensy.rules and save as 49-teensy.rules
+
+On linux: run `chmod +x /path/to/TeensyduinoInstall.linux64` to create the executable (replace 32 with 64 or ARM)
+
+Then run the Teensy installer and direct it to the Arduino directory
