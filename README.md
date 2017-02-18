@@ -34,3 +34,7 @@ Back Right = 4
 * [ ] Hardware: kill switch
 * [ ] Software: Create modes for display, debug, competition
 
+## DESIGN QUESTIONS
+* [ ] With 4 wheels, what is the mechanical effect of losing two wheels
+* [x] How much time do we get if we don't have to deploy > Not worth it, bot becomes too small
+* [ ] How to arrange sensors
