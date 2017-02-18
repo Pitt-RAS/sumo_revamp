@@ -114,8 +114,6 @@ void loop() {
   // COMMENT OUT THE NEXT 3 LINES FOR COMPETITION! check battery during tests
   if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){
     tone(BUZZER_PIN, 2000);
-  }else{
-    tone(BUZZER_PIN, 0);
   }
 
   //Serial.println("Looping new");
@@ -194,7 +192,7 @@ void loop() {
 	}
 
 	else {
-		//sumo.setVel(CURRENT_VEL, 0.2 * (abs(CURRENT_VEL) / 1.0));
+		sumo.setVel(CURRENT_VEL, 0.2 * (abs(CURRENT_VEL) / 1.0));
     sumo.setVel(0, 0);
 
 	}
