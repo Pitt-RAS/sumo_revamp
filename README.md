@@ -28,7 +28,9 @@ Back Left = 3
 Back Right = 4
 
 ## TODO
-* [x] dulplicate the battery checking feature that runs at startup to check x periodically while it's running so we don't discharge our batteries too much while we test (would be removed during competition)
-* [ ] settle on design
-* [ ] order parts
-* [ ] kill switch
+* [x] Software: dulplicate the battery checking feature that runs at startup to check x periodically while it's running so we don't discharge our batteries too much while we test (would be removed during competition)
+* [ ] Hardware: settle on design
+* [ ] Hardware: order parts
+* [ ] Hardware: kill switch
+* [ ] Software: Create modes for display, debug, competition
+
