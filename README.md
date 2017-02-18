@@ -27,4 +27,6 @@ On linux: run `chmod +x /path/to/TeensyduinoInstall.linux64` to create the execu
 Then run the Teensy installer and direct it to the Arduino directory
 
 ## TODO
-* [ ] dulplicate the battery checking feature that runs at startup to check periodically while it's running so we don't discharge our batteries too much while we test (would be removed during competition)
+* [x] dulplicate the battery checking feature that runs at startup to check x periodically while it's running so we don't discharge our batteries too much while we test (would be removed during competition)
+* [ ] settle on design 
+* [ ] order parts
