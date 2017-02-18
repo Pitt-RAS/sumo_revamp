@@ -108,8 +108,16 @@ void setup() {
   sumo.deploy_ramps();
 }
 
-#ifndef TEST_DRIVER
+#ifndef TEST_DRIVER // this is the main loop
 void loop() {
+
+  // COMMENT OUT THE NEXT 3 LINES FOR COMPETITION! check battery during tests
+  if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){
+    tone(BUZZER_PIN, 2000);
+  }else{
+    tone(BUZZER_PIN, 0);
+  }
+
   //Serial.println("Looping new");
   bool FL_Line = digitalRead(FL_LINESENSE_PIN);
   bool FR_Line = digitalRead(FR_LINESENSE_PIN);
@@ -148,13 +156,13 @@ void loop() {
 		}
 	}
 	else if(prox_front_error != PROXIMITY_INACTIVE){
-		//sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
+		sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
     sumo.setVel(0 , prox_front_error * FUDGE_FACTOR);
 
 	}
-	/*else if(prox_rear_error != PROXIMITY_INACTIVE){
+	else if(prox_rear_error != PROXIMITY_INACTIVE){
 		sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
-	} */
+	}
 
 	else if(!FL_Line || !FR_Line) //Line Checking
 	{
