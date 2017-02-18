@@ -4,9 +4,9 @@
 #include "motors.h"
 #include "ProxSense.h"
 #include "sensors_orientation.h"
-#include <EncoderMod.h>
+#include <EncoderPittMicromouse.h>
 #include "I2Cdev.h"
-#include "MPU9150.h" 
+#include "MPU9150.h"
 #include "Logger.h"
 #include "motion.h"
 
@@ -28,27 +28,27 @@ Motion sumo;
 //Orientation* mpu = Orientation::getInstance();
 
 void setup() {
-	
+
   ///////////////Setting all necessary pinModes////////////////////////
   //LineSensing Pins
   pinMode(FR_LINESENSE_PIN, INPUT);
   pinMode(FL_LINESENSE_PIN, INPUT);
   pinMode(BL_LINESENSE_PIN, INPUT);
   pinMode(BR_LINESENSE_PIN, INPUT);
-  
+
   //ProxSense Pins
   pinMode(F_PROX1_PIN, INPUT);
   pinMode(F_PROX2_PIN, INPUT);
   pinMode(F_PROX3_PIN, INPUT);
   pinMode(F_PROX4_PIN, INPUT);
   pinMode(F_PROX5_PIN, INPUT);
-  
+
   pinMode(R_PROX1_PIN, INPUT);
   pinMode(R_PROX2_PIN, INPUT);
   pinMode(R_PROX3_PIN, INPUT);
   pinMode(R_PROX4_PIN, INPUT);
   pinMode(R_PROX5_PIN, INPUT);
-  
+
   /*
   //Encoder Pins
   pinMode(FL_ENCODERB_PIN, INPUT);
@@ -60,7 +60,7 @@ void setup() {
   pinMode(FR_ENCODERA_PIN, INPUT);
   pinMode(BR_ENCODERB_PIN, INPUT);
   */
-  
+
   //Motor Pins
   pinMode(L_MOTOR_DIR_PIN, OUTPUT);
   pinMode(L_MOTOR_PWM_PIN, OUTPUT);
@@ -68,7 +68,7 @@ void setup() {
   pinMode(R_MOTOR_PWM_PIN, OUTPUT);
   analogWrite(L_MOTOR_PWM_PIN, 0);
   analogWrite(R_MOTOR_PWM_PIN, 0);
-  
+
   //MISC
   pinMode(SIGNAL_LED_PIN, OUTPUT);
   digitalWrite(SIGNAL_LED_PIN, 0);
@@ -76,26 +76,26 @@ void setup() {
   analogWrite(BUZZER_PIN, 0);
   pinMode(BUTTON_PIN, INPUT_PULLUP);
   pinMode(IMU_INTERRUPT_PIN, INPUT);
-  
-  
+
+
   ///////////////////Beginning Other PreSetup Scripts//////////////////////
- 
+
  //Set Serial Baud for debugging
   Serial.begin(BAUD);
-  
+
   // PWM resolution is 0-1023.
   analogWriteResolution(PWM_SPEED_BITS);
-  
+
 
   //Check Battery
   if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){
     tone(BUZZER_PIN, 2000);
   }
-  
+
   // Set higher pwm frequency for smoother motor control.
   analogWriteFrequency(L_MOTOR_PWM_PIN, 46875);
   analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
-  
+
   //Button Press
   //setVelRaw(-1024, 1024);
   while (digitalRead(BUTTON_PIN)){
@@ -115,11 +115,11 @@ void loop() {
   bool FR_Line = digitalRead(FR_LINESENSE_PIN);
   bool BR_Line = digitalRead(BR_LINESENSE_PIN);
   bool BL_Line = digitalRead(BL_LINESENSE_PIN);
-  
+
 	//Read sensors
 	int prox_front_error = frontProx.readAngle();
 	int prox_rear_error = rearProx.readAngle();
-	
+
 	//For debugging
 	/*Serial.print("front:");
 	Serial.print(prox_front_error);
@@ -155,7 +155,7 @@ void loop() {
 	/*else if(prox_rear_error != PROXIMITY_INACTIVE){
 		sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
 	} */
-	
+
 	else if(!FL_Line || !FR_Line) //Line Checking
 	{
 		if(CURRENT_VEL_DIRECTION){
@@ -184,7 +184,7 @@ void loop() {
 	else if(!BR_Line){
 		sumo.setVel(0.5 * CHARGE_VEL, -3);
 	}
-	
+
 	else {
 		//sumo.setVel(CURRENT_VEL, 0.2 * (abs(CURRENT_VEL) / 1.0));
     sumo.setVel(0, 0);
@@ -210,7 +210,7 @@ void loop() {
 		Serial.print(digitalRead(proximity_sensors_front[ii]));
 	}
 	Serial.print("    back:");
-	
+
 	for(int ii = 0; ii < 5; ii++)
 	{
 		Serial.print(digitalRead(proximity_sensors_rear[ii]));
