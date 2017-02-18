@@ -4,7 +4,7 @@ This repo is for the revamp of the mini sumo robot which placed 1st at the 2015 
 
 The revamped version will compete in the 2017 IEEE Student Activities Conference.
 
-Rules for this competition can be found here: http://media.wix.com/ugd/7fe387_8af9a80701e34a4dbb4a95af3a744282.pdf
+Rules for this competition can be found here: https://sac17.rowanieee.org/index.php?p=competitions#tabs-2
 
 
 ## SETUP:
@@ -31,3 +31,4 @@ Back Right = 4
 * [x] dulplicate the battery checking feature that runs at startup to check x periodically while it's running so we don't discharge our batteries too much while we test (would be removed during competition)
 * [ ] settle on design
 * [ ] order parts
+* [ ] kill switch
