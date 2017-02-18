@@ -25,3 +25,6 @@ Go here: https://www.pjrc.com/teensy/49-teensy.rules and save as 49-teensy.rules
 On linux: run `chmod +x /path/to/TeensyduinoInstall.linux64` to create the executable (replace 64 with 32 or ARM)
 
 Then run the Teensy installer and direct it to the Arduino directory
+
+## TODO
+* [ ] dulplicate the battery checking feature that runs at startup to check periodically while it's running so we don't discharge our batteries too much while we test (would be removed during competition)
