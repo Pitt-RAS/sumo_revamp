@@ -1,11 +1,15 @@
 #ifndef MICROMOUSE_MOTION_H_
 #define MICROMOUSE_MOTION_H_
 
-#include "Arduino.h"
-#include "config.h"
-#include "motors.h"
-#include "PIDController.h"
+#include <Arduino.h>
 #include <EncoderPittMicromouse.h>
+
+#include "PIDController.h"
+
+#include "../config.h"
+#include "../device/motors.h"
+
+
 
 class Motion
 {

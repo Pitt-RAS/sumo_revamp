@@ -1,7 +1,7 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include "config.h"
+#include "../config.h"
 
 template<typename T, size_t capacity>
 class LogQueue {

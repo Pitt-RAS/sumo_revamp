@@ -1,14 +1,18 @@
 #include <Arduino.h>
 
-#include "config.h"
-#include "motors.h"
-#include "ProxSense.h"
-#include "sensors_orientation.h"
 #include <EncoderPittMicromouse.h>
-#include "I2Cdev.h"
-#include "MPU9150.h"
-#include "Logger.h"
-#include "motion.h"
+
+#include "src/config.h"
+
+#include "src/device/motors.h"
+#include "src/device/ProxSense.h"
+#include "src/device/sensors_orientation.h"
+#include "src/device/I2Cdev.h"
+#include "src/device/MPU9150.h"
+
+#include "src/debugging/Logger.h"
+
+#include "src/motion/motion.h"
 
 //Turn on off test driver
 //#define TEST_DRIVER
