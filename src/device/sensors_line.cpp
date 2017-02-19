@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "config.h"
+#include "../config.h"
 #include "sensors_line.h"
 
 //We need functions to initialize the interrupts for the line sensor pins

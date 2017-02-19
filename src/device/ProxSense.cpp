@@ -1,6 +1,7 @@
+#include <Arduino.h>
+
 #include "ProxSense.h"
-#include "Arduino.h"
-#include "config.h"
+#include "../config.h"
 
 ProxSense::ProxSense(int proxPin[5], int weight[5])
 {

@@ -5,7 +5,7 @@
 
 #include "MPU9150.h"
 
-#include "config.h"
+#include "../config.h"
 
 class Orientation {
   private:

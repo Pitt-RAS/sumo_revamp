@@ -1,6 +1,8 @@
 #include <Arduino.h>
-#include "config.h"
+
 #include "motors.h"
+
+#include "../config.h"
 
 // input desired force and current speed
 static float idealMotorOutput(float force, float velocity) {

@@ -1,6 +1,6 @@
 #include "sensors_orientation.h"
-#include "config.h"
-#include "Logger.h"
+#include "../config.h"
+#include "../debugging/Logger.h"
 
 #include <Arduino.h>
 
