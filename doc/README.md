@@ -31,8 +31,10 @@ Back Right = 4
 * [x] Software: dulplicate the battery checking feature that runs at startup to check x periodically while it's running so we don't discharge our batteries too much while we test (would be removed during competition)
 * [ ] Hardware: settle on design
 * [ ] Hardware: order parts
-* [ ] Hardware: kill switch
+* [x] Hardware: kill switch > On Teensy
 * [ ] Software: Create modes for display, debug, competition
+* [ ] Hardware: Cut wheels in half
+* [ ] Hardware: Motor mounts
 
 ## DESIGN QUESTIONS
 * [ ] With 4 wheels, what is the mechanical effect of losing two wheels

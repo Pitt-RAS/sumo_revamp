@@ -17,6 +17,8 @@
 //Turn on off test driver
 //#define TEST_DRIVER
 
+static bool display = false;
+
 //Create proximity sensor pin array initailize proximity sensors
 int proximity_sensors_front[5]        = {F_PROX1_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_PIN};
 int proximity_sensors_front_weight[5] = { -90,         -45,         0,           45,          90};
@@ -126,6 +128,7 @@ void loop() {
   bool BR_Line = digitalRead(BR_LINESENSE_PIN);
   bool BL_Line = digitalRead(BL_LINESENSE_PIN);
 
+<<<<<<< HEAD
   //Read sensors
   int prox_front_error = frontProx.readAngle();
   int prox_rear_error = rearProx.readAngle();
@@ -198,6 +201,90 @@ void loop() {
 
   }
   sumo.update(); //Must be called so that PID loop gets updated
+=======
+	//Read sensors
+	int prox_front_error = frontProx.readAngle();
+	int prox_rear_error = rearProx.readAngle();
+
+	//For debugging
+	/*Serial.print("front:");
+	Serial.print(prox_front_error);
+	Serial.print("    ");
+	Serial.print("rear:");
+	Serial.println(prox_rear_error);
+	*/
+	//prox_rear_error = PROXIMITY_INACTIVE;
+	//prox_front_error = PROXIMITY_INACTIVE;
+
+	//WIP all signs will need to be set through testing
+	//These constants should be in config.h, however for now they will be here until the signs are all set.
+	static float CHARGE_VEL = 3.0;
+	static float CURRENT_VEL = CHARGE_VEL;
+	static bool CURRENT_VEL_DIRECTION = true; //true = forward false = backward
+	float FUDGE_FACTOR = -(3.0/90.0); //Makes turns faster or slower
+	delay(1);
+	//Set possible movements
+	//Prioritize the front over the rear
+	if(!(FL_Line || FR_Line || BL_Line || BR_Line)){
+		sumo.setVel(0, 0);
+		//Stop 4ever
+		while(1){
+			sumo.update();
+			delay(1);
+		}
+	}
+	else if(prox_front_error != PROXIMITY_INACTIVE){
+        if (display) {
+            sumo.setVel(0, 0);
+        } else {
+            sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
+        }
+	}
+	else if(prox_rear_error != PROXIMITY_INACTIVE){
+        if (display) {
+            sumo.setVel(0, 0)
+        } else {
+            sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
+        }
+	}
+
+	else if(!FL_Line || !FR_Line) //Line Checking
+	{
+		if(CURRENT_VEL_DIRECTION){
+			CURRENT_VEL = -CURRENT_VEL;
+			CURRENT_VEL_DIRECTION = false;
+		}
+		sumo.setVel(CURRENT_VEL,0);
+	}
+	else if(!BL_Line || !BR_Line)
+	{
+		if(!CURRENT_VEL_DIRECTION){
+			CURRENT_VEL = -CURRENT_VEL;
+			CURRENT_VEL_DIRECTION = true;
+		}
+		sumo.setVel(CURRENT_VEL,0);
+	}
+	else if(!FL_Line){
+		sumo.setVel(-0.5 * CHARGE_VEL, -3);
+	}
+	else if(!FR_Line){
+		sumo.setVel(-0.5 * CHARGE_VEL, 3);
+	}
+	else if(!BL_Line){
+		sumo.setVel(0.5 * CHARGE_VEL,  3);
+	}
+	else if(!BR_Line){
+		sumo.setVel(0.5 * CHARGE_VEL, -3);
+	} else {
+        if (display) {
+            sumo.setVel(0, 0);
+        } else {
+            sumo.setVel(CURRENT_VEL, 0.2 * (abs(CURRENT_VEL) / 1.0));
+        }
+
+	}
+	sumo.update(); //Must be called so that PID loop gets updated
+>>>>>>> f5f5edfe0332eb066adb7456b5805e767fd874bb
 
 }
 #endif
