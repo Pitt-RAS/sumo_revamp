@@ -13,6 +13,8 @@
 //Turn on off test driver
 //#define TEST_DRIVER
 
+static bool display = false;
+
 //Create proximity sensor pin array initailize proximity sensors
 int proximity_sensors_front[5]        = {F_PROX1_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_PIN};
 int proximity_sensors_front_weight[5] = {-90,         -45,         0,           45,          90};
@@ -154,10 +156,18 @@ void loop() {
 		}
 	}
 	else if(prox_front_error != PROXIMITY_INACTIVE){
-		sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
+        if (display) {
+            sumo.setVel(0, 0);
+        } else {
+            sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
+        }
 	}
 	else if(prox_rear_error != PROXIMITY_INACTIVE){
-		sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
+        if (display) {
+            sumo.setVel(0, 0)
+        } else {
+            sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
+        }
 	}
 
 	else if(!FL_Line || !FR_Line) //Line Checking
@@ -187,10 +197,12 @@ void loop() {
 	}
 	else if(!BR_Line){
 		sumo.setVel(0.5 * CHARGE_VEL, -3);
-	}
-
-	else {
-		sumo.setVel(CURRENT_VEL, 0.2 * (abs(CURRENT_VEL) / 1.0));
+	} else {
+        if (display) {
+            sumo.setVel(0, 0);
+        } else {
+            sumo.setVel(CURRENT_VEL, 0.2 * (abs(CURRENT_VEL) / 1.0));
+        }
 
 	}
 	sumo.update(); //Must be called so that PID loop gets updated
