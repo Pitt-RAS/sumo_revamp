@@ -33,7 +33,7 @@ Motion sumo;
 
 //Orientation* mpu = Orientation::getInstance();
 
-void setup() {
+void setup() {  // place these inside constructor
 
   ///////////////Setting all necessary pinModes////////////////////////
   //LineSensing Pins
@@ -86,10 +86,10 @@ void setup() {
 
   ///////////////////Beginning Other PreSetup Scripts//////////////////////
 
- //Set Serial Baud for debugging
+ //Set Serial Baud for debugging baud=bits per second
   Serial.begin(BAUD);
 
-  // PWM resolution is 0-1023.
+  // PWM resolution is 0-1023. wanted more than default
   analogWriteResolution(PWM_SPEED_BITS);
 
 
@@ -105,10 +105,9 @@ void setup() {
   //Button Press
   //setVelRaw(-1024, 1024);
   while (digitalRead(BUTTON_PIN)){
-      Serial.println("button!");
-    sumo.update();
-    delay(10);
-
+    Serial.println("button!");
+    sumo.update();  // need to update pid loop (why?)
+    delay(10); // possibly to prevent sumo.update from being called too often
   }
   delay(5000);
   sumo.deploy_ramps();
@@ -144,11 +143,11 @@ void loop() {
 
   //WIP all signs will need to be set through testing
   //These constants should be in config.h, however for now they will be here until the signs are all set.
-  static float CHARGE_VEL = 3.0;
+  static float CHARGE_VEL = 3.0;  // scoped global variable
   static float CURRENT_VEL = CHARGE_VEL;
   static bool CURRENT_VEL_DIRECTION = true; //true = forward false = backward
-  float FUDGE_FACTOR = -(3.0/90.0); //Makes turns faster or slower
-  delay(1);
+  float FUDGE_FACTOR = -(3.0/90.0); //Makes turns faster or slower "might be 3 rotations per second per count from the prox sensors. check math inside set velocity"-levi
+  delay(1);  // ????
   //Set possible movements
   //Prioritize the front over the rear
   if(!(FL_Line || FR_Line || BL_Line || BR_Line)){
@@ -159,20 +158,22 @@ void loop() {
       delay(1);
     }
   }
-  else if(prox_front_error != PROXIMITY_INACTIVE){
+  // charge forward
+  else if(prox_front_error != PROXIMITY_INACTIVE){  // as long as something is seen
         if (display) {
             sumo.setVel(0, 0);
         } else {
             sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
         }
   }
+  // charge backwards
   else if(prox_rear_error != PROXIMITY_INACTIVE)
   {
-        if (display) 
+        if (display)
         {
             sumo.setVel(0, 0);
         }
-        else 
+        else
         {
             sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
         }
@@ -182,7 +183,7 @@ void loop() {
   {
     if(CURRENT_VEL_DIRECTION){
       CURRENT_VEL = -CURRENT_VEL;
-      CURRENT_VEL_DIRECTION = false;
+      CURRENT_VEL_DIRECTION = false;  // prevents repeatedly hitting the line
     }
     sumo.setVel(CURRENT_VEL,0);
   }
@@ -195,7 +196,7 @@ void loop() {
     sumo.setVel(CURRENT_VEL,0);
   }
   else if(!FL_Line){
-    sumo.setVel(-0.5 * CHARGE_VEL, -3);
+    sumo.setVel(-0.5 * CHARGE_VEL, -3);  // mess around with .5 constant, it's limited by if we prioritize rotational or charge velocity
   }
   else if(!FR_Line){
     sumo.setVel(-0.5 * CHARGE_VEL, 3);
