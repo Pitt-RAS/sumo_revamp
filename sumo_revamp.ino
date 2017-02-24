@@ -13,7 +13,6 @@
 #include "src/debugging/Logger.h"
 
 #include "src/motion/motion.h"
-
 //Turn on off test driver
 //#define TEST_DRIVER
 
