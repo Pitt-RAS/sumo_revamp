@@ -6,6 +6,7 @@
 
 class LineSensor
 {
+
 	private:
 	  int FL_PIN;
       int FR_PIN;
@@ -22,5 +23,5 @@ class LineSensor
         bool isWhiteBR;
 };
 
-
 #endif
+
