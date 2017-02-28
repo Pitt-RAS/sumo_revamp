@@ -9,6 +9,7 @@
 #include "src/device/sensors_orientation.h"
 #include "src/device/I2Cdev.h"
 #include "src/device/MPU9150.h"
+#include "src/device/LineSensor.h"
 
 #include "src/debugging/Logger.h"
 
@@ -31,49 +32,14 @@ ProxSense rearProx(proximity_sensors_rear, proximity_sensors_rear_weight);
 //Initialize motion control object
 Motion sumo;
 
+//construct line sensors
+ LineSensor lineSensors(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_PIN, BR_LINESENSE_PIN);
+
 //Orientation* mpu = Orientation::getInstance();
 
 void setup() {  // place these inside constructor
 
   ///////////////Setting all necessary pinModes////////////////////////
-  //LineSensing Pins
-  pinMode(FR_LINESENSE_PIN, INPUT);
-  pinMode(FL_LINESENSE_PIN, INPUT);
-  pinMode(BL_LINESENSE_PIN, INPUT);
-  pinMode(BR_LINESENSE_PIN, INPUT);
-
-  //ProxSense Pins
-  pinMode(F_PROX1_PIN, INPUT);
-  pinMode(F_PROX2_PIN, INPUT);
-  pinMode(F_PROX3_PIN, INPUT);
-  pinMode(F_PROX4_PIN, INPUT);
-  pinMode(F_PROX5_PIN, INPUT);
-
-  pinMode(R_PROX1_PIN, INPUT);
-  pinMode(R_PROX2_PIN, INPUT);
-  pinMode(R_PROX3_PIN, INPUT);
-  pinMode(R_PROX4_PIN, INPUT);
-  pinMode(R_PROX5_PIN, INPUT);
-
-  /*
-  //Encoder Pins
-  pinMode(FL_ENCODERB_PIN, INPUT);
-  pinMode(FL_ENCODERA_PIN, INPUT);
-  pinMode(BR_ENCODERA_PIN, INPUT);
-  pinMode(FR_ENCODERB_PIN, INPUT);
-  pinMode(BL_ENCODERA_PIN, INPUT);
-  pinMode(BL_ENCODERB_PIN, INPUT);
-  pinMode(FR_ENCODERA_PIN, INPUT);
-  pinMode(BR_ENCODERB_PIN, INPUT);
-  */
-
-  //Motor Pins
-  pinMode(L_MOTOR_DIR_PIN, OUTPUT);
-  pinMode(L_MOTOR_PWM_PIN, OUTPUT);
-  pinMode(R_MOTOR_DIR_PIN, OUTPUT);
-  pinMode(R_MOTOR_PWM_PIN, OUTPUT);
-  analogWrite(L_MOTOR_PWM_PIN, 0);
-  analogWrite(R_MOTOR_PWM_PIN, 0);
 
   //MISC
   pinMode(SIGNAL_LED_PIN, OUTPUT);
@@ -92,15 +58,14 @@ void setup() {  // place these inside constructor
   // PWM resolution is 0-1023. wanted more than default
   analogWriteResolution(PWM_SPEED_BITS);
 
+  // Set higher pwm frequency for smoother motor control.
+  analogWriteFrequency(L_MOTOR_PWM_PIN, 46875);
+  analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
 
   //Check Battery
   if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){
     tone(BUZZER_PIN, 2000);
   }
-
-  // Set higher pwm frequency for smoother motor control.
-  analogWriteFrequency(L_MOTOR_PWM_PIN, 46875);
-  analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
 
   //Button Press
   //setVelRaw(-1024, 1024);
@@ -117,15 +82,16 @@ void setup() {  // place these inside constructor
 void loop() {
 
   // COMMENT OUT THE NEXT 3 LINES FOR COMPETITION! check battery during tests
-  if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){
+  if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){ //***NOTE: does && Display count here***//
     tone(BUZZER_PIN, 2000);
   }
 
-  //Serial.println("Looping new");
-  bool FL_Line = digitalRead(FL_LINESENSE_PIN);
-  bool FR_Line = digitalRead(FR_LINESENSE_PIN);
-  bool BR_Line = digitalRead(BR_LINESENSE_PIN);
-  bool BL_Line = digitalRead(BL_LINESENSE_PIN);
+  lineSensors.update();
+  Serial.println(lineSensors.isWhiteFL);
+  bool FL_Line = !lineSensors.isWhiteFL;
+  bool FR_Line = !lineSensors.isWhiteFR;
+  bool BL_Line = !lineSensors.isWhiteBL;
+  bool BR_Line = !lineSensors.isWhiteBR;
 
   //Read sensors
   int prox_front_error = frontProx.readAngle();
@@ -142,11 +108,10 @@ void loop() {
   //prox_front_error = PROXIMITY_INACTIVE;
 
   //WIP all signs will need to be set through testing
-  //These constants should be in config.h, however for now they will be here until the signs are all set.
-  static float CHARGE_VEL = 3.0;  // scoped global variable
+
   static float CURRENT_VEL = CHARGE_VEL;
   static bool CURRENT_VEL_DIRECTION = true; //true = forward false = backward
-  float FUDGE_FACTOR = -(3.0/90.0); //Makes turns faster or slower "might be 3 rotations per second per count from the prox sensors. check math inside set velocity"-levi
+  
   delay(1);  // ????
   //Set possible movements
   //Prioritize the front over the rear
