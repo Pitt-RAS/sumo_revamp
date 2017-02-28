@@ -4,6 +4,18 @@
 
 #include "../config.h"
 
+Motor::Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state){
+	pin_ = motor_f_pin;
+	pin_pwm_ = motor_f_pwm_pin;
+	forward_state_ = motor_f_forward_state;
+
+	//initializes pins for motors
+	pinMode(pin_, OUTPUT);
+	pinMode(pin_pwm_, OUTPUT);
+	
+}
+
+
 // input desired force and current speed
 static float idealMotorOutput(float force, float velocity) {
   float required_current, back_emf;
@@ -12,14 +24,6 @@ static float idealMotorOutput(float force, float velocity) {
   return ((required_current * RATED_INTERNAL_RESISTANCE + back_emf) / BATTERY_VOLTAGE);
 }
 
-Motor::Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state){
-  pin_ = motor_f_pin;
-  pin_pwm_ = motor_f_pwm_pin;
-  forward_state_ = motor_f_forward_state;
-
-  // Set higher pwm frequency for smoother motor control.
-  analogWriteFrequency(pin_pwm_, 46875);
-}
 
 void Motor::Set(float accel, float current_velocity) {
   float force;

@@ -7,7 +7,7 @@
 #include "I2Cdev.h"
 #include "MPU9150.h"
 
-volatile bool Orientation::mpu_interrupt_ = false;
+volatile bool Orientation::mpu_interrupt_ = false; //keep at false
 Orientation* Orientation::instance_ = NULL;
 
 Orientation::Orientation() {
