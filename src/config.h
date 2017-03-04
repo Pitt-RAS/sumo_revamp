@@ -132,6 +132,9 @@
 #define RATED_RPM_PER_VBEMF (3000.0/6.0) // RPM/Volt
 #define RATED_TORQUE_PER_AMP 0.000622353 // torque in N-m at output shaft, Amps passed through motor
 
+#define CHARGE_VEL 3.0 // scoped global variable
+#define FUDGE_FACTOR -(3.0/90.0) //Makes turns faster or slower "might be 3 rotations per second per count from the prox sensors. check math inside set velocity"-levi
+
 // Convert motor parameters to robot parameters
 #define WHEEL_RADIUS (MM_PER_STEP * STEPS_PER_MOTOR_REV * GEAR_RATIO / (2 * 3.14159265359))// in millimeters
 #define FORCE_PER_AMP (RATED_TORQUE_PER_AMP * GEAR_RATIO * 1000 / WHEEL_RADIUS) // in Newtons
