@@ -4,10 +4,7 @@
 #include <Arduino.h>
 
 #include "../config.h"
-#include "../device/motors.h"
 #include "../device/ProxSense.h"
-#include "../device/sensors_orientation.h"
-#include "../device/LineSensor.h"
 
 class Enemy
 {

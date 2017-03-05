@@ -6,8 +6,8 @@ int prox_front_weight[5] = {-90, -45, 0, 45, 90};
 int prox_rear[5] = {R_PROX1_PIN, R_PROX2_PIN, R_PROX3_PIN, R_PROX4_PIN, R_PROX5_PIN};
 int prox_rear_weight[5] = {-90, -45, 0, 45, 90};
 
-frontProx(prox_front, prox_front_weight);
-rearProx(proximity_rear, prox_rear_weight);
+ProxSense frontProx(prox_front, prox_front_weight);
+ProxSense rearProx(prox_rear, prox_rear_weight);
 
 Enemy::Enemy()
 {
@@ -16,16 +16,19 @@ Enemy::Enemy()
 
 int Enemy::getAngle()
 {
-
-
-
-
-	return angle_total;
+	if (in_front)
+	{
+		return front_angle;
+	}
+	else
+	{
+		return rear_angle;
+	}
 }
 
-void update()
+void Enemy::update()
 {
-	font_angle = frontProx.readAngle();
+	front_angle = frontProx.readAngle();
 	rear_angle = rearProx.readAngle();
 	
 	if (front_angle != PROXIMITY_INACTIVE)
@@ -48,27 +51,4 @@ void update()
 	}
 	
 }
-
-
-
-
-
-class Enemy
-{
-	private:
-	
-		float front_angle, rear_angle, angle_total;
-		bool in_front, in_rear;
-		
-	public:
-	
-		bool see_enemy;
-		
-		Enemy();
-		
-		void update();
-		float getAngle();
-};
-
-#endif
 
