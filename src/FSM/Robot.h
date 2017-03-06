@@ -1,6 +1,11 @@
-#include "device/LineSensor.h"
-#include "device/ProxSense.h"
-#include "motion/motion.h"
+#ifndef ROBOT_H
+#define ROBOT_H
+
+#include "../device/LineSense.h"
+#include "../device/ProxSense.h"
+#include "../motion/motion.h"
+#include "Enemy.h"
+
 
 class Robot
 {
@@ -11,14 +16,20 @@ class Robot
         int enemyDirection;   // 1 or -1
         int currentAngle;     // -90 to 90
 
-        void updateSensors();
 
     public:
-        Robot(LineSensor*, ProxSense*, ProxSense*, int);
-            void executeState();
+        Robot(Motion& sumoInput, LineSense& lineSensorsInput, Enemy& opponentInput, int startingState) :
+            sumo(sumoInput), lineSensors(lineSensorsInput), opponent(opponentInput), currentState(startingState) {}
 
-            LineSensor lineSensors;
-            ProxSense frontProx;
-            ProxSense rearProx;
-            int currentState;
+
+        void updateSensors();
+        void updateState();
+        void executeState();
+
+        LineSense lineSensors;
+        Enemy opponent;
+        
+        int currentState;
 }; 
+
+#endif

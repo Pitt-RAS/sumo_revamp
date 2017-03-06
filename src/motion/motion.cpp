@@ -26,24 +26,21 @@ void Motion::update()
 
 	int lpwm = pid_left.Calculate(left_v, target_left_v);
 	int rpwm = pid_right.Calculate(right_v, target_right_v);
-	Serial.print("rpwm: ");
-	Serial.print(rpwm);
-	Serial.print("lpwm: ");
-	Serial.println(lpwm);
+
 	setVelRaw(rpwm, lpwm);
 }
 //Public state setting methods
 void Motion::charge()
 {
-	setVel(CHARGE_VELOCITY, 0); //Go forward not rotation
+	setVel(CHARGE_VELOCITY * opponent.direction, turn_factor * opponent.getAngle()); //Go forward not rotation
 }
 
-void Motion::search_arc()
+void Motion::search()
 {
 	setVel(1.0, 0.2); //10 m/s, 10rad/s rotation
 }
 
-void Motion::deploy_ramps()
+void Motion::deployRamps()
 {
 	setVelRaw(1024, -1024);
 	delay(100); //Deploys the plows

@@ -1,27 +1,25 @@
 #include <Arduino.h>
 #include "Robot.h"
-#include "config.h"
+#include "../config.h"
 
-Robot::Robot (LineSensor* lineSensors, ProxSense* frontProx, ProxSense* rearProx, int startingState) {
+Robot::Robot (Motion &inputMotion, LineSense &inputLineSensors, Enemy &inputEnemy, int startingState) {
 
-    lineSensors = LineSensor(starting variables);
-    lineSensors = *passedLineSensors;
-    frontProx = *passedFrontProx;
-    rearProx = *passedrearProx;
+    sumo        = inputMotion;
+    lineSensors = inputLineSensors;
+    enemy       = inputEnemy;
 
     currentState = startingState;
 }
 
-Robot::updateSensors() {
+void Robot::updateSensors() {
     lineSensors.update();
-    int frontProxAngle = frontProx.readAngle();
-    int rearProxAngle = rearProx.readAngle();
+    enemy.update();
 }
 
-Robot::updateState() {
+void Robot::updateState() {
 
-    updateSensors();
     ///////////// Interperet ProxSense, determine enemyDirection and enemyAngle /////////////
+    /*
     if (frontProxAngle != PROXIMITY_INACTIVE && rearProxAngle == PROXIMITY_INACTIVE) {
         enemyDirection = 1;
         enemyAngle = frontProxAngle;
@@ -40,17 +38,13 @@ Robot::updateState() {
             enemyAngle = rearProxAngle;
         }
     }
+    */
 
     switch(currentState) {
         case CHARGE:
-
-    
-            
-
-            
-            break;
-        case SHOVE: //if in front and encoders not at desired velocity (by certain amount, maybe consider previous velocity in case just accelerating)
-
+            if (!enemy.inSight) {
+                currentState = SEARCH;
+            }
             break;
         case RECOVER: //if previously charging and no longer in view
             // We should set our velocity lower and turn either towards them or away
@@ -63,23 +57,20 @@ Robot::updateState() {
 
             break;
         case SEARCH: // if unseen
-            
+            if (enemey.inSight) {
+                currentState = CHARGE;
+            }
             break;
     }
 }
 
-Robot::executeState() {
+void Robot::executeState() {
     switch(currentState) {
         case CHARGE:
-            sumo.setVel(CHARGE_VEL * enemyDirection, frontProxAngle * turnConstant);
+            sumo.charge();
             break;
-        case SHOVE:
-            // Completely unused rn
-            break;
-        case RECOVER:
-            
+        case SEARCH:
+            sumo.search();
+            break;        
     }
 }
-
-Robot::charge() {
-    

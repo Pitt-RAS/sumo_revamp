@@ -3,17 +3,19 @@
 
 class ProxSense
 {
-private:
-	bool prox[5];
-	int proxPin[5];
-	int weight[5];
-	
-public:
-  ProxSense(int*, int*);
-	void update();
-	int generateAngle();
-	bool sensorHigh();
-	int readAngle();
+    private:
+        bool prox[5];
+        int *prox_pin;
+        int *prox_weight;
+        
+    public:
+        ProxSense(int *prox_pin_input, int *prox_weight_input) :
+            prox_pin(prox_pin_input), prox_weight(prox_weight_input) {}
+
+        void update();
+        int generateAngle();
+        bool sensorHigh();
+        int readAngle();
  };
  
- #endif 
+ #endif

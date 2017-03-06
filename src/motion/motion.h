@@ -8,7 +8,8 @@
 
 #include "../config.h"
 #include "../device/motors.h"
-
+#include "../device/LineSense.h"
+#include "../FSM/Enemy.h"
 
 
 class Motion
@@ -25,28 +26,33 @@ private:
 	EncoderPittMicromouse blEn; //Back Left EncoderPittMicromouse (3)
 	EncoderPittMicromouse brEn; //Back Right EncoderPittMicromouse (4)
 
+    Enemy opponent;
+    LineSense lineSensors;
+
 	float target_left_v, target_right_v;
 	//Private motion functions
 	void setVelRaw(bool r, int pwmr, bool l, int pwml);
 
 public:
-  Motion();
-  	void setVelRaw(int pwmr, int pwml);
+    Motion(Enemy& opponentInput, LineSense& lineSensorsInput) :
+        opponent(opponentInput), lineSensors(lineSensorsInput) {}
 
-  	void setVel(float v, float w);
-	void setVel(float v);
-	void charge();
-	void search_arc();
-	void deploy_ramps();
+    void setVelRaw(int pwmr, int pwml);
 
-	//Must be called a set rate
-	void update();
+    void setVel(float v, float w);
+    void setVel(float v);
+    void charge();
+    void search();
+    void deployRamps();
 
-	//Returns veloctiy of selected EncoderPittMicromouse
-	float EnVelocityFL();
-	float EnVelocityFR();
-	float EnVelocityBL();
-	float EnVelocityBR();
+    //Must be called a set rate
+    void update();
+
+    //Returns veloctiy of selected EncoderPittMicromouse
+    float EnVelocityFL();
+    float EnVelocityFR();
+    float EnVelocityBL();
+    float EnVelocityBR();
 
  };
 

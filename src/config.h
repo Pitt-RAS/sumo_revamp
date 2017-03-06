@@ -151,4 +151,11 @@
 #define SEARCH_ARC_ROTATION 10
 #define CHARGE_VELOCITY 512
 
+// FSM Definitions
+#define CHARGE 0
+#define RETREAT 1
+#define EVADE 2
+#define SEARCH 3
+#define RECOVER 4
+
 #endif
