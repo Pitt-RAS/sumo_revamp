@@ -10,7 +10,10 @@
 class Robot
 {
     private: 
-        Motion sumo;
+        Motion& sumo;
+        LineSense& lineSensors;
+        Enemy& opponent;
+
         int currentVelocity;
         int currentDirection; // 1 or -1
         int enemyDirection;   // 1 or -1
@@ -19,17 +22,16 @@ class Robot
 
     public:
         Robot(Motion& sumoInput, LineSense& lineSensorsInput, Enemy& opponentInput, int startingState) :
-            sumo(sumoInput), lineSensors(lineSensorsInput), opponent(opponentInput), currentState(startingState) {}
+            sumo(sumoInput),
+            lineSensors(lineSensorsInput),
+            opponent(opponentInput),
+            currentState(startingState) {}
 
 
+        int currentState;
         void updateSensors();
         void updateState();
         void executeState();
-
-        LineSense lineSensors;
-        Enemy opponent;
-        
-        int currentState;
 }; 
 
 #endif

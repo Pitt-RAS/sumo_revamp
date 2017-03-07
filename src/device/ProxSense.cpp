@@ -5,19 +5,16 @@
 
 ProxSense::ProxSense(int proxPin[5], int weight[5])
 {
-	memcpy(this->proxPin, proxPin, 5*sizeof(int));
-	memcpy(this->weight, weight, 5*sizeof(int));
-
-	for (int i=0; i<5; i++){
-		pinMode(proxPin[i], INPUT);
+	for (int pin_iter = 0; pin_iter < 5; pin_iter++){
+		pinMode(prox_pin[pin_iter], INPUT);
 	}
 }
 
 void ProxSense::update()
 {
-	for(int ii = 0; ii < 5; ii++)
+	for (int pin_iter = 0; pin_iter < 5; pin_iter++)
 	{
-		prox[ii] = digitalRead(proxPin[ii]);
+        prox[pin_iter] = !digitalRead(proxPin[pin_iter]); // returns false if it sees something hence the !
 	}
 }
 
@@ -25,17 +22,17 @@ int ProxSense::generateAngle()
 {
 	int sum = 0;
 	int angle;
-	int numActive = 0;
-	for(int ii = 0; ii < 5; ii++)
+	int num_active = 0;
+	for (int pin_iter = 0; pin_iter < 5; pin_iter++)
 	{
-		if(!prox[ii]){
-			numActive++;
-			sum += weight[ii];
+		if (prox[pin_iter]) { 
+			num_active++;
+			sum += weight[pin_iter];
 		}
 	}
 	
-	if(numActive > 0){
-		angle = sum/numActive;
+	if (num_active > 0){
+		angle = sum/num_active;
 	}
 	else {
 		angle = PROXIMITY_INACTIVE; //Set to some error that we will never reach

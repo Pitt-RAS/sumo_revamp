@@ -2,18 +2,9 @@
 #include "Robot.h"
 #include "../config.h"
 
-Robot::Robot (Motion &inputMotion, LineSense &inputLineSensors, Enemy &inputEnemy, int startingState) {
-
-    sumo        = inputMotion;
-    lineSensors = inputLineSensors;
-    enemy       = inputEnemy;
-
-    currentState = startingState;
-}
-
 void Robot::updateSensors() {
     lineSensors.update();
-    enemy.update();
+    opponent.update();
 }
 
 void Robot::updateState() {
@@ -42,7 +33,7 @@ void Robot::updateState() {
 
     switch(currentState) {
         case CHARGE:
-            if (!enemy.inSight) {
+            if (!opponent.in_sight) {
                 currentState = SEARCH;
             }
             break;
@@ -57,7 +48,7 @@ void Robot::updateState() {
 
             break;
         case SEARCH: // if unseen
-            if (enemey.inSight) {
+            if (opponent.in_sight) {
                 currentState = CHARGE;
             }
             break;

@@ -26,21 +26,21 @@ void Enemy::update()
         direction = 1;
 		in_front = true;
 		in_rear = false;
-		see_enemy = true;
+		in_sight = true;
 	}
 	else if (rear_angle != PROXIMITY_INACTIVE)
 	{
         direction = -1;
 		in_front = false;
 		in_rear = true;
-		see_enemy = true;
+		in_sight = true;
 	}
 	else 
 	{
         direction = 0;
 		in_front = false;
 		in_rear = false;
-		see_enemy = false;
+	    in_sight = false;
 	}
 	
 }

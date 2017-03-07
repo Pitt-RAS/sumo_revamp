@@ -28,17 +28,24 @@ int proximity_sensors_front[5]        = {F_PROX1_PIN, F_PROX2_PIN, F_PROX3_PIN, 
 int proximity_sensors_front_weight[5] = {-90,         -45,         0,           45,          90};
 int proximity_sensors_rear[5]         = {R_PROX1_PIN, R_PROX2_PIN, R_PROX3_PIN, R_PROX4_PIN, R_PROX5_PIN};
 int proximity_sensors_rear_weight[5]  = {-90,         -45,         0,           45,          90};
+
     // Create the ProxSense objects
-const ProxSense& frontProx(proximity_sensors_front, proximity_sensors_front_weight);
-const ProxSense& rearProx (proximity_sensors_rear,  proximity_sensors_rear_weight);
+ProxSense frontProx(proximity_sensors_front, proximity_sensors_front_weight);
+ProxSense rearProx (proximity_sensors_rear,  proximity_sensors_rear_weight);
+//const ProxSense& frontProxRef = frontProx;
+//const ProxSense& rearProxRef  = rearProx;
+
     // Create the Enemy object
-const Enemy& opponent(frontProx, rearProx);
+Enemy opponent(frontProx, rearProx);
+//const Enemy& opponentRef = opponent;
 
 // Line Sensors
-const LineSense& lineSensors(L_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_PIN, BR_LINESENSE_PIN);
+LineSense lineSensors(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_PIN, BR_LINESENSE_PIN);
+//const LineSense& lineSensorsRef = lineSensors;
 
 // Motion Control object
-const Motion& sumo(opponent, lineSensors);
+Motion sumo(opponent, lineSensors);
+//const Motion& sumoRef = sumo;
 
 // Robot FSM object
 Robot stateMachine(sumo, lineSensors, opponent, CHARGE);

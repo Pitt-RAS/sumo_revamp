@@ -1,14 +1,6 @@
 #include "motion.h"
 
-Motion::Motion()
-	:motor_l (L_MOTOR_DIR_PIN, L_MOTOR_PWM_PIN, L_MOTOR_FORWARD_STATE),
-	motor_r (R_MOTOR_DIR_PIN, R_MOTOR_PWM_PIN, R_MOTOR_FORWARD_STATE),
-	pid_left (KP_POSITION, KI_POSITION, KD_POSITION),
-	pid_right (KP_POSITION, KI_POSITION, KD_POSITION),
-	flEn(FL_ENCODERA_PIN, FL_ENCODERB_PIN), //Front Left Encoder (1)
-	frEn(FR_ENCODERA_PIN, FR_ENCODERB_PIN), //Front Right Encoder (2)
-	blEn(BL_ENCODERA_PIN, BL_ENCODERB_PIN), //Back Left Encoder (3)
-	brEn(BR_ENCODERA_PIN, BR_ENCODERB_PIN) //Back Right Encoder (4)
+Motion::Motion(Enemy& opponentInput, LineSense& lineSensorsInput)
 {
 
   //Setup the interrupt to call update

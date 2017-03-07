@@ -17,7 +17,7 @@ class Enemy
         Enemy(ProxSense& frontProxInput, ProxSense& rearProxInput) : 
             frontProx(frontProxInput), rearProx(rearProxInput) {}
     
-        bool see_enemy, in_front, in_rear;
+        bool in_sight, in_front, in_rear;
         int direction; // 1 or -1
         
         void update();
