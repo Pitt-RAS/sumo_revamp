@@ -1,13 +1,5 @@
 #include "motion.h"
 
-Motion::Motion(Enemy& opponentInput, LineSense& lineSensorsInput)
-{
-
-  //Setup the interrupt to call update
-  target_left_v = 0;
-  target_right_v = 0;
-}
-
 void Motion::update()
 {
 	//Update PID controllers
@@ -24,7 +16,7 @@ void Motion::update()
 //Public state setting methods
 void Motion::charge()
 {
-	setVel(CHARGE_VELOCITY * opponent.direction, turn_factor * opponent.getAngle()); //Go forward not rotation
+	setVel(CHARGE_VELOCITY * opponent.direction, FUDGE_FACTOR * opponent.getAngle()); //Go forward not rotation
 }
 
 void Motion::search()
@@ -121,10 +113,7 @@ void Motion::setVelRaw(int rpwm, int lpwm){
 	else {
 		l = false;
 	}
-	setVelRaw(r, abs(rpwm), l, abs(lpwm)); //Sets the velocity to be equal to the PWM if the PWM is positive
+    motor_r.SetRaw(r, abs(rpwm));
+    motor_l.SetRaw(l, abs(lpwm));
 }
 
-void Motion::setVelRaw(bool r, int pwmr, bool l, int pwml) {
-	motor_r.SetRaw(r, pwmr);
-	motor_l.SetRaw(l, pwml);
-}

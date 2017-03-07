@@ -10,8 +10,13 @@ class ProxSense
         
     public:
         ProxSense(int *pin_array_input, int *weight_array_input) :
-            prox_pin(prox_pin_input), 
-            prox_weight(prox_weight_input) {}
+          pin_array(pin_array_input), 
+          weight_array(weight_array_input)
+        {
+            for (int pin_iter = 0; pin_iter < 5; pin_iter++) {
+                pinMode(pin_array[pin_iter], INPUT);    
+            }
+        }
 
         void update();
         int generateAngle();
