@@ -25,10 +25,10 @@ class Robot
             sumo(sumoInput),
             lineSensors(lineSensorsInput),
             opponent(opponentInput),
-            currentState(startingState) {}
+            current_state(startingState) {}
 
 
-        int currentState;
+        int current_state;
         void updateSensors();
         void updateState();
         void executeState();

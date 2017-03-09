@@ -1,7 +1,5 @@
-#include <Arduino.h>
-
 #include <EncoderPittMicromouse.h>
-
+#include <Arduino.h>
 #include "src/config.h"
 
 // Devices
@@ -32,20 +30,15 @@ int proximity_sensors_rear_weight[5]  = {-90,         -45,         0,           
     // Create the ProxSense objects
 ProxSense frontProx(proximity_sensors_front, proximity_sensors_front_weight);
 ProxSense rearProx (proximity_sensors_rear,  proximity_sensors_rear_weight);
-//const ProxSense& frontProxRef = frontProx;
-//const ProxSense& rearProxRef  = rearProx;
 
     // Create the Enemy object
 Enemy opponent(frontProx, rearProx);
-//const Enemy& opponentRef = opponent;
 
 // Line Sensors
 LineSense lineSensors(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_PIN, BR_LINESENSE_PIN);
-//const LineSense& lineSensorsRef = lineSensors;
 
 // Motion Control object
 Motion sumo(opponent, lineSensors);
-//const Motion& sumoRef = sumo;
 
 // Robot FSM object
 Robot stateMachine(sumo, lineSensors, opponent, CHARGE);

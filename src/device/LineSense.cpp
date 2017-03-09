@@ -2,23 +2,21 @@
 #include "../config.h"
 #include "LineSense.h"
 
-LineSense::LineSense(int fl_pin, int fr_pin, int bl_pin, int br_pin){
-	FL_PIN = fl_pin;
-	FR_PIN = fr_pin;
-	BL_PIN = bl_pin;
-	BR_PIN = br_pin;
- 	  
-	pinMode(FR_PIN, INPUT);
-	pinMode(FL_PIN, INPUT);
-	pinMode(BL_PIN, INPUT);
-	pinMode(BR_PIN, INPUT);
-	
-	update();
+void LineSense::update() {
+      is_white_FL = !digitalRead(FL_PIN);
+      is_white_FR = !digitalRead(FR_PIN);
+      is_white_BL = !digitalRead(BL_PIN);
+      is_white_BR = !digitalRead(BR_PIN);
+
+      on_line = is_white_FL || is_white_FR || is_white_BL || is_white_BR;
 }
 
-void LineSense::update() {
-      isWhiteFL = !digitalRead(FL_PIN);
-      isWhiteFR = !digitalRead(FR_PIN);
-      isWhiteBL = !digitalRead(BL_PIN);
-      isWhiteBR = !digitalRead(BR_PIN);
+bool LineSense::hitLineInDirection(int direction) {
+    if (direction == FRONT) {
+        return (is_white_FL || is_white_FR);
+    } else if (direction == REAR) {
+        return (is_white_BL || is_white_BR);
+    } else {
+        return false;
+    }
 }

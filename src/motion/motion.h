@@ -55,6 +55,9 @@ class Motion
         void charge();
         void search();
         void deployRamps();
+        void guardLine();
+
+        int getCurrentDirection();
 
         //Must be called a set rate
         void update();

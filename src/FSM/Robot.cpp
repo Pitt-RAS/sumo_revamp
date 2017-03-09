@@ -5,6 +5,7 @@
 void Robot::updateSensors() {
     lineSensors.update();
     opponent.update();
+    currentDirection = sumo.getCurrentDirection();
 }
 
 void Robot::updateState() {
@@ -31,10 +32,18 @@ void Robot::updateState() {
     }
     */
 
-    switch(currentState) {
+    switch(current_state) {
         case CHARGE:
+            if (!KAMIKAZE) {
+                if (lineSensors.hitLineInDirection(currentDirection)) {
+                    current_state = GUARD_LINE;
+                    break;
+                }
+            }
             if (!opponent.in_sight) {
-                currentState = SEARCH;
+                current_state = SEARCH;
+            } else {
+                current_state = CHARGE;
             }
             break;
         case RECOVER: //if previously charging and no longer in view
@@ -49,19 +58,26 @@ void Robot::updateState() {
             break;
         case SEARCH: // if unseen
             if (opponent.in_sight) {
-                currentState = CHARGE;
+                current_state = CHARGE;
+            }
+            break;
+        case GUARD_LINE:
+            if (!lineSensors.on_line) {
+                current_state = CHARGE;
             }
             break;
     }
 }
 
 void Robot::executeState() {
-    switch(currentState) {
+    switch(current_state) {
         case CHARGE:
             sumo.charge();
             break;
         case SEARCH:
             sumo.search();
             break;        
+        case GUARD_LINE:
+            sumo.guardLine();
     }
 }

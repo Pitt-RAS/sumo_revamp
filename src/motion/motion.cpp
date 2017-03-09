@@ -24,6 +24,10 @@ void Motion::search()
 	setVel(1.0, 0.2); //10 m/s, 10rad/s rotation
 }
 
+void Motion::guardLine() {
+    setVel(CHARGE_VELOCITY * opponent.direction * -1, FUDGE_FACTOR * opponent.getAngle() * -1); // charge directly away from them
+}
+
 void Motion::deployRamps()
 {
 	setVelRaw(1024, -1024);
@@ -96,6 +100,17 @@ float Motion::EnVelocityBL(){
 }
 float Motion::EnVelocityBR(){
 	 return (1000 * brEn.stepRate() * MM_PER_STEP);
+}
+
+int Motion::getCurrentDirection() {
+    float averageVelocity = (flEn.stepRate() + frEn.stepRate() + blEn.stepRate() + brEn.stepRate()) / 4.0;
+    if (averageVelocity > 0) {
+        return FRONT;
+    } else if (averageVelocity < 0) {
+        return REAR;
+    } else {
+        return 0;
+    }
 }
 
 //Private methods
