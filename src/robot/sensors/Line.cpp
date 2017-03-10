@@ -1,24 +1,21 @@
-#include <Arduino.h>
-#include "../config.h"
 #include "Line.h"
 
 void Line::update() {
-      is_white_FL = !digitalRead(FL_PIN);
-      is_white_FR = !digitalRead(FR_PIN);
-      //is_white_BL = !digitalRead(BL_PIN);
-      //is_white_BR = !digitalRead(BR_PIN);
-      is_white_BL = false;
-      is_white_BR = false;
+    is_white[2][2] = !digitalRead(FL_PIN);
+    is_white[2][0] = !digitalRead(FR_PIN);
+    //is_white[0][2] = !digitalRead(BL_PIN);
+    //is_white[0][0] = !digitalRead(BR_PIN);
+    is_white[0][2] = false;
+    is_white[0][0] = false;
 
-      on_line = is_white_FL || is_white_FR || is_white_BL || is_white_BR;
+    is_white[2][1] = is_white[2][2] || is_white[2][0];
+    is_white[0][1] = is_white[0][2] || is_white[0][0];
+    is_white[1][2] = is_white[2][2] || is_white[0][2];
+    is_white[1][0] = is_white[2][0] || is_white[0][0];
+
+    is_white[1][1] = is_white[2][1] || is_white[0][1];
 }
 
-bool Line::hitLineInDirection(int direction) {
-    if (direction == FRONT) {
-        return (is_white_FL || is_white_FR);
-    } else if (direction == REAR) {
-        return (is_white_BL || is_white_BR);
-    } else {
-        return false;
-    }
+bool Line::isWhite(int direction, int side) {
+    return is_white[direction + 1][side + 1];
 }

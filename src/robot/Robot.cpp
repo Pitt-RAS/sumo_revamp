@@ -1,13 +1,12 @@
 #include "Robot.h"
 
-Robot::Robot(Motion& passedMotion) {
-    motion = passedMotion;
+Robot::Robot() {
     frontProx({F_PROX_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_P    IN},
               {-90,        -45,         0,           45,          90             });
     rearProx ({R_PROX_PIN, R_PROX2_PIN, R_PROX3_PIN, R_PROX4_PIN, R_PROX5_P    IN},                  
               {-90,        -45,         0,           45,          90             });
 
-    Line lineSensors(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_    PIN, BR_LINESENSE_PIN);
+    Line line(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_PIN, BR_LINESENSE_PIN);
 
     Movement movement();
 }
@@ -19,53 +18,12 @@ void Robot::update() {
     movement.update();
 }
 
-
-void Robot::updateLine() {
-    lineSensors.update();
-
-    is_white_FL = lineSensors.is_white_FL;
-    is_white_FR = lineSensors.is_white_FR;
-    is_white_BL = lineSensors.is_white_BL;
-    is_white_BR = lineSensors.is_white_BR;
-
-    is_white_F  = is_white_FL || is_white_FR;
-    is_white_B  = is_white_BL || is_white_BR;
-    is_white_L  = is_white_FL || is_white_BL;
-    is_white_R  = is_White_FR || is_white_BR;
-
-    on_line     = is_white_F || is_white_B;
+bool Robot::isWhite() {
+    return line.isWhite(0, 0);
 }
 
-int Robot::getLineDirection() {
-    if (!on_line) {
-        return 0;
-    }
-    else if (is_white_F && !is_white_B) 
-    {
-        return 1;
-    }
-    else if (is_white_B && !is_white_F)
-    {
-        return -1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-bool Robot::lineInDirection(int passed_direction) {
-    if (passed_direction = 1) {
-        return is_white_F;
-    }
-    else if (passed_direction = -1)
-    {
-        return is_white_B;
-    }
-    else 
-    {
-        return false;
-    }
+bool Robot::isWhite(int direction, int side) {
+    return line.isWhite(direction, side);
 }
 
 int Robot::getCurrentDirection() {

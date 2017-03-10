@@ -2,24 +2,21 @@
 #define ROBOT_H
 
 #include <Arduino.h>
-#include "config.h"
-#include "device/ProxSense.h"
-#include "device/LineSense.h"
+#include "../config.h"
+#include "sensors/Proximity.h"
+#include "sensors/Line.h"
+#include "sensors/Movement.h"
 #include <EncoderPittMicromouse.h>
 
 class Robot
 {
     private:
-        Motion& motion;
-
         Movement movement;
-
         Proximity prox;
-
         Line line;
 
     public:
-        Robot(Motion&);
+        Robot();
 
         void update();
 
@@ -27,6 +24,7 @@ class Robot
         int getEnemyDirection();
         bool enemyInSight();
 
+        bool isWhite();
         bool isWhite(int, int);
 
 
