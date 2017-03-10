@@ -1,14 +1,12 @@
 #include "Robot.h"
 
 Robot::Robot() {
-    frontProx({F_PROX_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_P    IN},
-              {-90,        -45,         0,           45,          90             });
-    rearProx ({R_PROX_PIN, R_PROX2_PIN, R_PROX3_PIN, R_PROX4_PIN, R_PROX5_P    IN},                  
-              {-90,        -45,         0,           45,          90             });
 
     Line line(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_PIN, BR_LINESENSE_PIN);
 
     Movement movement();
+    
+    Proximity prox;
 }
 
 void Robot::update() {
