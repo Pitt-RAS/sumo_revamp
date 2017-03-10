@@ -12,36 +12,22 @@
 // Debugging
 #include "src/debugging/Logger.h"
 // FSM
-#include "src/FSM/Robot.h"
-#include "src/FSM/Enemy.h"
+#include "src/StateMachine.h"
+#include "src/Robot.h"
 // Motion
 #include "src/motion/motion.h"
 
 const bool display = false;
 const bool competition = false;
 
-// Create the Enemy object abstraction from proximity sensors
-    // Create proximity sensor pin array and weights
-int proximity_sensors_front[5]        = {F_PROX1_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_PIN};
-int proximity_sensors_front_weight[5] = {-90,         -45,         0,           45,          90};
-int proximity_sensors_rear[5]         = {R_PROX1_PIN, R_PROX2_PIN, R_PROX3_PIN, R_PROX4_PIN, R_PROX5_PIN};
-int proximity_sensors_rear_weight[5]  = {-90,         -45,         0,           45,          90};
-
-    // Create the ProxSense objects
-ProxSense frontProx(proximity_sensors_front, proximity_sensors_front_weight);
-ProxSense rearProx (proximity_sensors_rear,  proximity_sensors_rear_weight);
-
-    // Create the Enemy object
-Enemy opponent(frontProx, rearProx);
-
-// Line Sensors
-LineSense lineSensors(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_PIN, BR_LINESENSE_PIN);
+// Robot object
+Robot sumo();
 
 // Motion Control object
-Motion sumo(opponent, lineSensors);
+Motion motion(opponent, lineSensors);
 
 // Robot FSM object
-Robot stateMachine(sumo, lineSensors, opponent, CHARGE);
+StateMachine stateMachine();
 
 void setup() { 
 
@@ -79,7 +65,7 @@ void setup() {
     }
     Serial.println("Button Pressed");
     delay(5000);
-    sumo.deployRamps();
+    motion.deployRamps();
 }
 
 void loop(){
@@ -87,9 +73,8 @@ void loop(){
         tone(BUZZER_PIN, 2000);
     }
 
-    stateMachine.updateSensors();
     stateMachine.updateState();
     stateMachine.executeState();
 
-    sumo.update(); // what does update pid loop mean?
+    motion.update(); // what does update pid loop mean?
 }

@@ -150,9 +150,9 @@
 #define MAX_VEL_CORNER .5 // m/s
 
 #define PROXIMITY_INACTIVE 9999999
-#define SEARCH_ARC_VELOCITY 1
+#define SEARCH_VELOCITY 0
 #define SEARCH_ARC_ROTATION 10
-#define CHARGE_VELOCITY 3
+#define CHARGE_VELOCITY 0
 
 // FSM Definitions
 #define CHARGE 0
