@@ -7,55 +7,18 @@ Robot::Robot(Motion& passedMotion) {
     rearProx ({R_PROX_PIN, R_PROX2_PIN, R_PROX3_PIN, R_PROX4_PIN, R_PROX5_P    IN},                  
               {-90,        -45,         0,           45,          90             });
 
-    LineSense lineSensors(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_    PIN, BR_LINESENSE_PIN);
-   
-    encoderFL(FL_ENCODERA_PIN, FL_ENCODERB_PIN);
-    encoderFR(FR_ENCODERA_PIN, FR_ENCODERB_PIN);
-    encoderBL(BL_ENCODERA_PIN, BL_ENCODERB_PIN);
-    encoderBR(BR_ENCODERA_PIN, BR_ENCODERB_PIN);
+    Line lineSensors(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_    PIN, BR_LINESENSE_PIN);
+
+    Movement movement();
 }
 
 void Robot::update() {
-    updateProx();
-    updateLine();
+    motion.update(); // for desired velocities
+    prox.update();
+    line.update();
+    movement.update();
 }
 
-
-void Robot:updateProx() {
-    front_angle = frontProx.readAngle();
-    rear_angle  = rearProx.readAngle();
-
-    if (front_angle != PROXIMITY_INACTIVE && rear_angle != PROXIMITY_INACTIVE) {
-        // We see something on both sides so we will refer to our previous readings which entails doing nothing here, if we get more sophistcated we will detect which is closer to us and call that the true enemy direction
-        if (enemy_direction == 1) {
-            enemy_angle = front_angle;
-        } else if (enemy_direction == -1) {
-            enemy_angle = rear_angle;
-        }
-        enemy_in_sight = true;
-    } 
-    else if (front_angle != PROXIMITY_INACTIVE) 
-    {
-        enemy_angle = front_angle;
-        enemy_direction = 1;
-        enemy_in_sight = true;
-        
-    }
-    else if (rear_angle != PROXIMITY_INACTIVE)
-    {
-        enemy_angle = rear_angle;
-        enemy_direction = -1;
-        enemy_in_sight = true;
-    }
-    else
-    {
-        enemy_angle = PROXIMITY_INACTIVE;
-        enemy_direction = 0;
-        enemy_in_sight = false;
-    }
-}
-    
-    
 
 void Robot::updateLine() {
     lineSensors.update();
@@ -72,26 +35,6 @@ void Robot::updateLine() {
 
     on_line     = is_white_F || is_white_B;
 }
-
-void Robot::updateEncoders() {
-    current_velocity_FL = 1000 * encoderFL.stepRate() * MM_PER_STEP;
-    current_velocity_FR = 1000 * encoderFR.stepRate() * MM_PER_STEP;
-    current_velocity_BL = 1000 * encoderBL.stepRate() * MM_PER_STEP;
-    current_velocity_BR = 1000 * encoderBR.stepRate() * MM_PER_STEP;
-
-    desired_velocity = motion.getDesiredVelocity();
-    desired_velocity_FL = motion.getDesiredVelocityOfLeft();
-    desired_velocity_BL = desired_velocity_FL;
-    desired_velocity_FR = motion.getDesiredVelocityofRight();
-    desired_velocity_BR = desired_velocity_FR;
-
-
-    error_FL = desired_velocity_FL - current_velocity_FL;
-    error_FR = desired_velocity_FR - current_velocity_FR;
-    error_BL = desired_velocity_BL - current_velocity_BL;
-    error_BR = desired_velocity_BR - current_velocity_BR;
-}
-
 
 int Robot::getLineDirection() {
     if (!on_line) {
@@ -126,19 +69,43 @@ bool Robot::lineInDirection(int passed_direction) {
 }
 
 int Robot::getCurrentDirection() {
-    float average_velocity = (current_velocity_FL + current_velocity_FR + current_velocity_BL + current_velocity_BR);
-    average_velocity /= 4.0;
-    if (average_velocity > 0) {
-        return 1;
-    }
-    else if (average_velocity < 0)
-    {
-        return -1;
-    }
-    else 
-    {
-        return 0;
-    }
+    return movement.getCurrentDirection(0, 0);
+}
+
+int Robot::getCurrentDirection(int direction, int side) {
+    return movement.getCurrentDirection(direction, side);
+}
+
+int Robot::getDesiredDirection() {
+    return Movement.getDesiredDirection(0, 0);
+}
+
+int Robot::getDesiredDirection(int direction, side) {
+    return Movement.getDesiredDirection(direction, side);
+}
+
+float Robot::getCurrentVelocity() {
+    return movement.getCurrentVelocity(0, 0);
+}
+
+float Robot::getCurrentVelocity(int direction, int side) {
+    return movement.getCurrentVelocity(direction, side);
+}
+
+float Robot::getDesiredVelocity() {
+    return movement.getDesiredVelocity(0, 0);
+}
+
+float Robot::getDesiredVelocity(int direction, int side) {
+    return movement.getDesiredVelocity(direction, side);
+}
+
+float Robot::getVelocityError() {
+    return movement.getError(0, 0);
+}
+
+float Robot::getVelocityError(int direction, int side) {
+    return movement.getVelocityError(direction, side);
 }
 
 // Uncomment when accelerometer is working, this is just to say if our acceleration is one standard devation different than we expect we are probably in contact with something
@@ -169,7 +136,7 @@ bool Robot::possiblyInContact() {
 */
 
 bool Robot::possiblyLosing() {
-    if ((current_direction != desired_direction)) {
+    if ((movement.getCurrentDirection() != movement.getDesiredDirection())) {
         return true;
     }
     else
@@ -179,12 +146,12 @@ bool Robot::possiblyLosing() {
 }
 
 bool Robot::possiblyUnder() {
-    if (!on_line || !enemy_in_sight) {
+    if (!line.onLine || !prox.enemyInSight()) {
         return false;
     }
     else
     {
-        return lineInDirection(enemy_direction);
+        return line.lineInDirection(prox.getEnemyDirection());
     }
 }
 
