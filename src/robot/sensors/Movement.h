@@ -20,9 +20,12 @@ class Movement
 
         void update();
 
+        void setDesiredVelocity(int, int, float);
+
+        int getCurrentDirection(int, int);
+        int getDesiredDirection(int, int);
         float getCurrentVelocity(int, int);
         float getDesiredVelocity(int, int);
-        void  setDesiredVelocity(int, int, float);
-        float getError(int, int);
+        float getVelocityError(int, int);
 }
 #endif

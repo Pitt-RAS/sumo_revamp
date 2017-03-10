@@ -6,15 +6,11 @@ Movement::Movement() {
     encoderBL(BL_ENCODERA_PIN, BL_ENCODERB_PIN);
     encoderBR(BR_ENCODERA_PIN, BR_ENCODERB_PIN);
 
-    desired_velocity_FL = 0;
-    desired_velocity_FR = 0;
-    desired_velocity_BL = 0;
-    desired_velocity_BR = 0;
-
     update();
 }
 
 void Movement::update() {
+    // Every index should be subtracted by 1 to indicate direction and side properly
     current_velocity[2][2] = 1000 * encoderFL.stepRate() * MM_PER_STEP;
     current_velocity[2][0] = 1000 * encoderFR.stepRate() * MM_PER_STEP;
     current_velocity[0][2] = 1000 * encoderBL.stepRate() * MM_PER_STEP;
@@ -26,20 +22,51 @@ void Movement::update() {
     current_velocity[1][1] = ((current_velocity[2][1] + current_velocity[0][1]) / 2.0);
 }
 
+
+
 void Movement::setDesiredVelocity(int direction, int side, float passed_desired_velocity) {
+    // Garunteed to be updated during the Robot update phase from the Motion class 
     desired_velocity[direction + 1][side + 1] = passed_desired_velocity;
+}
+
+
+
+int Movement::getCurrentDirection(int direction, int side) {
+    if (current_velocity[direction + 1][side + 1] > 0) {
+        return 1;
+    }
+    else if (current_velocity[direction + 1][side + 1] < 0) 
+    {
+        return -1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int Movement::getDesiredDirection(int direction, int side) {
+    if (desired_velocity[direction + 1][side + 1] > 0) {
+        return 1;
+    }
+    else if (desired_velocity[direction + 1][side + 1] < 0) 
+    {
+        return -1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 float Movement::getCurrentVelocity(int direciton, int side) {
     return current_velocity[direction + 1][side + 1];
 }
 
-float Movement::getError(int direction, int side) {
-    return current_velocity[direction + 1][side + 1] - desired_velocity[direction + 1][side + 1];
+float Movement::getDesiredVelocity(int direction, int side) {
+    return desired_velocity[direction + 1][side + 1];
 }
 
-// bool Movement::liftedWheels() {
-    // TODO
-    // Only if wheels error corresponds to intended direction
-    // Difference of two standard deviations
-// }
+float Movement::getVelocityError(int direction, int side) {
+    return current_velocity[direction + 1][side + 1] - desired_velocity[direction + 1][side + 1];
+}
