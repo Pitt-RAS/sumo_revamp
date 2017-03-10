@@ -2,10 +2,12 @@
 
 void Movement::update() {
     // Every index should be subtracted by 1 to indicate direction and side properly
-    current_velocity[2][2] = 1000 * encoderFL.stepRate() * MM_PER_STEP;
+    // current_velocity[2][2] = 1000 * encoderFL.stepRate() * MM_PER_STEP;
+    current_velocity[2][2] = 1000 * encoderBL.stepRate() * MM_PER_STEP;
     current_velocity[2][0] = 1000 * encoderFR.stepRate() * MM_PER_STEP;
     current_velocity[0][2] = 1000 * encoderBL.stepRate() * MM_PER_STEP;
-    current_velocity[0][0] = 1000 * encoderBR.stepRate() * MM_PER_STEP;
+    // current_velocity[0][0] = 1000 * encoderBR.stepRate() * MM_PER_STEP;
+    current_velocity[0][0] = 1000 * encoderFR.stepRate() * MM_PER_STEP;
     current_velocity[2][1] = ((current_velocity[2][2] + current_velocity[2][0]) / 2.0);
     current_velocity[0][1] = ((current_velocity[0][2] + current_velocity[0][0]) / 2.0);
     current_velocity[1][2] = ((current_velocity[0][2] + current_velocity[2][2]) / 2.0);

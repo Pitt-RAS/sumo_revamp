@@ -106,9 +106,9 @@
 #define MM_PER_STEP 0.6444
 
 // PID tuning parameters
-#define KP_POSITION (1023.0/1.0) //Cause stronger responses to input data
-#define KI_POSITION 0 //0.01//((1024.0/1.0)/20.0) //How quickly to accumulate error
-#define KD_POSITION 0 //How quickly to slow down change in error
+#define KP_POSITION 3200.0 //Cause stronger responses to input data
+#define KI_POSITION 0.01 //0.01//((1024.0/1.0)/20.0) //How quickly to accumulate error
+#define KD_POSITION 9500000.0 //How quickly to slow down change in error
 
 // Robot characteristics
 #define ROBOT_MASS .500 // kilograms
@@ -135,7 +135,6 @@
 #define RATED_RPM_PER_VBEMF (3000.0/6.0) // RPM/Volt
 #define RATED_TORQUE_PER_AMP 0.000622353 // torque in N-m at output shaft, Amps passed through motor
 
-#define CHARGE_VEL 3.0 // scoped global variable
 #define FUDGE_FACTOR -(3.0/90.0) //Makes turns faster or slower "might be 3 rotations per second per count from the prox sensors. check math inside set velocity"-levi
 
 // Convert motor parameters to robot parameters
@@ -150,9 +149,9 @@
 #define MAX_VEL_CORNER .5 // m/s
 
 #define PROXIMITY_INACTIVE 9999999
-#define SEARCH_VELOCITY 0
+#define SEARCH_VELOCITY 0.05
 #define SEARCH_ARC_ROTATION 10
-#define CHARGE_VELOCITY 0
+#define CHARGE_VELOCITY 0.1
 
 // FSM Definitions
 #define CHARGE 0

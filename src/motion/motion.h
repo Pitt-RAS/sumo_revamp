@@ -50,6 +50,7 @@ class Motion
         void search();
         void deployRamps();
         void guardLine();
+        void testVel(float);
  };
 
 #endif

@@ -2,9 +2,11 @@
 
 void StateMachine::updateState() {
 
+    cycle++; 
+
     sumo.update();
     motion.update();
-
+    
     switch(current_state) {
         case CHARGE:
             if (!KAMIKAZE) {
@@ -40,18 +42,39 @@ void StateMachine::updateState() {
             }
             break;
     }
+    if (cycle % 100 == 0) {
+        Serial.print("\nEnemy in Sight:   \t");
+        Serial.print(sumo.enemyInSight());
+        Serial.print("\nEnemy Angle:      \t");
+        Serial.print(sumo.getEnemyAngle());
+        Serial.print("\nOn Line:          \t");
+        Serial.print(sumo.isWhite());
+        Serial.print("\nDesired Direction: \t");
+        Serial.print(sumo.getDesiredDirection());
+    }
 }
 
 void StateMachine::executeState() {
-
+    if (cycle % 100 == 0) {
+        Serial.print("\n\nCurrent State:    \t");
+    }
     switch(current_state) {
         case CHARGE:
+            if (cycle % 100 == 0) {
+                Serial.print("CHARGE");
+            }
             motion.charge();
             break;
         case SEARCH:
+            if (cycle % 100 == 0) {
+                Serial.print("SEARCH");
+            }
             motion.search();
             break;        
         case GUARD_LINE:
+            if (cycle % 100 == 0) {
+                Serial.print("GUARD LINE");
+            }
             motion.guardLine();
             break;
     }

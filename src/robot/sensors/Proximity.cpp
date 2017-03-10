@@ -3,7 +3,8 @@
 void Proximity::update()
 {
 	front_angle = frontProx.readAngle();
-	rear_angle  = rearProx.readAngle();
+    rear_angle  = PROXIMITY_INACTIVE;
+	// rear_angle  = rearProx.readAngle();
 	
     if (front_angle != PROXIMITY_INACTIVE && rear_angle != PROXIMITY_INACTIVE) {
         // We see something on both sides so we will refer to our previous readingswhich entails doing nothing here, if we get more sophistcated we will detect which is closer to us and call that the true enemy direction

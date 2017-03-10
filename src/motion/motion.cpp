@@ -10,7 +10,7 @@ void Motion::update() {
 
 	float modified_velocity_left  = pidLeft.Calculate (current_velocity_left,  desired_velocity_left);
 	float modified_velocity_right = pidRight.Calculate(current_velocity_right, desired_velocity_right);
-	setVelRaw(modified_velocity_left, modified_velocity_right);
+	setVelRaw(modified_velocity_left, 0);
 }
 
 //Public state setting methods
@@ -61,6 +61,10 @@ void Motion::setVelRaw(float velocity_left, float velocity_right){
 	else {
 		right_going_forward = false;
 	}
-    motorLeft.SetRaw (left_going_forward,  abs(velocity_left));
-    motorRight.SetRaw(right_going_forward, abs(velocity_right));
+    // motorLeft.SetRaw (left_going_forward,  abs(velocity_left));
+    // motorRight.SetRaw(right_going_forward, abs(velocity_right));
+}
+
+void Motion::testVel(float input_velocity) {
+    setVel(input_velocity, 0);
 }

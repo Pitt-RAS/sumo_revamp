@@ -13,12 +13,14 @@ class StateMachine
         Motion motion;
 
         int current_state;
+        int cycle;
 
     public:
         StateMachine(int starting_state) :
             sumo(),
             motion(sumo) {
                 current_state = starting_state;
+                cycle = 0;
             } 
 
         int getState();
