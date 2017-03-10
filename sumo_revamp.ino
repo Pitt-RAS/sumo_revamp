@@ -36,14 +36,8 @@ void setup() {
         tone(BUZZER_PIN, 2000);
     }
 
-    //Button Press
-    Serial.println("Waiting for Button");
-    while (digitalRead(BUTTON_PIN)){
-        stateMachine.updateState();  // need to update pid loop (why?)
-        delay(10); // possibly to prevent sumo.update from being called too often
-    }
-    Serial.println("Button Pressed");
-    delay(5000);
+
+    waitForButton();
     stateMachine.deployRamps();
 }
 
@@ -56,3 +50,15 @@ void loop(){
     stateMachine.executeState();
 
 }
+
+void waitForButton(){
+    //Button Press
+    Serial.println("Waiting for Button");
+    while (digitalRead(BUTTON_PIN)){
+        delay(10); // possibly to prevent sumo.update from being called too often
+    }
+    Serial.println("Button Pressed");
+    delay(5000);
+}
+
+
