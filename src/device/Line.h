@@ -1,7 +1,7 @@
-#ifndef LINE_SENSE_H 
-#define LINE_SENSE_H
+#ifndef LINE_H 
+#define LINE_H
 
-class LineSense
+class Line
 {
 
 	private:

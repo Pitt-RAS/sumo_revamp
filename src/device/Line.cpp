@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include "../config.h"
-#include "LineSense.h"
+#include "Line.h"
 
-void LineSense::update() {
+void Line::update() {
       is_white_FL = !digitalRead(FL_PIN);
       is_white_FR = !digitalRead(FR_PIN);
       //is_white_BL = !digitalRead(BL_PIN);
@@ -13,7 +13,7 @@ void LineSense::update() {
       on_line = is_white_FL || is_white_FR || is_white_BL || is_white_BR;
 }
 
-bool LineSense::hitLineInDirection(int direction) {
+bool Line::hitLineInDirection(int direction) {
     if (direction == FRONT) {
         return (is_white_FL || is_white_FR);
     } else if (direction == REAR) {
