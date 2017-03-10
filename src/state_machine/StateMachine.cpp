@@ -1,26 +1,19 @@
-#include <Arduino.h>
 #include "StateMachine.h"
-#include "../config.h"
-
-
-StateMachine::StateMachine() {
-    Robot sumo(motion);
-    Motion motion(sumo);
-}
 
 void StateMachine::updateState() {
 
     sumo.update();
+    motion.update();
 
     switch(current_state) {
         case CHARGE:
             if (!KAMIKAZE) {
-                if (sumo.hitLineInDirection(current_direction)) {
+                if (sumo.isWhite(sumo.getCurrentDirection(), 0)) {
                     current_state = GUARD_LINE;
                     break;
                 }
             }
-            if (!sumo.enemy_in_sight) {
+            if (!sumo.enemyInSight()) {
                 current_state = SEARCH;
             } else {
                 current_state = CHARGE;
@@ -37,12 +30,12 @@ void StateMachine::updateState() {
 
             break;
         case SEARCH: // if unseen
-            if (sumo.enemy_in_sight) {
+            if (sumo.enemyInSight()) {
                 current_state = CHARGE;
             }
             break;
         case GUARD_LINE:
-            if (!sumo.on_line) {
+            if (!sumo.isWhite()) {
                 current_state = CHARGE;
             }
             break;
@@ -53,13 +46,17 @@ void StateMachine::executeState() {
 
     switch(current_state) {
         case CHARGE:
-            sumo.charge();
+            motion.charge();
             break;
         case SEARCH:
-            sumo.search();
+            motion.search();
             break;        
         case GUARD_LINE:
-            sumo.guardLine();
+            motion.guardLine();
             break;
     }
+}
+
+void StateMachine::deployRamps() {
+    motion.deployRamps();
 }

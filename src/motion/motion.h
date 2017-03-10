@@ -2,13 +2,11 @@
 #define MOTION_H
 
 #include <Arduino.h>
-#include <EncoderPittMicromouse.h>
-
-#include "PIDController.h"
 
 #include "../config.h"
-#include "../device/motors.h"
-#include "../Robot.h"
+#include "../robot/Robot.h"
+#include "motors.h"
+#include "PIDController.h"
 
 
 class Motion
@@ -16,39 +14,42 @@ class Motion
     private:
         Robot& sumo;
 
-        EncoderPittMicromouse encoderFL;
-        EncoderPittMicromouse encoderFR;
-        EncoderPittMicromouse encoderBL;
-        EncoderPittMicromouse encoderBR;
-
         Motor motorLeft;
         Motor motorRight;
 
         PIDController pidLeft;
         PIDController pidRight;
 
+        float desired_velocity_net;
         float desired_velocity_left;
         float desired_velocity_right;
-        float desired_velocity_net;
 
+        float current_velocity_net;
         float current_velocity_left;
         float current_velocity_right;
-        float current_velocity_net;
 
-        void setVelRaw(float modified_velocity, float modified_velocity);
+        void setVelRaw(float, float);
 
     public:
-        Motion(Robot&);
+        Motion(Robot& passedSumo) :
+            sumo(passedSumo),
+            motorLeft (L_MOTOR_DIR_PIN, L_MOTOR_PWM_PIN, L_MOTOR_FORWARD_STATE),
+            motorRight (R_MOTOR_DIR_PIN, R_MOTOR_PWM_PIN, R_MOTOR_FORWARD_STATE),
+            pidLeft  (KP_POSITION, KI_POSITION, KD_POSITION, 10000, 0),
+            pidRight (KP_POSITION, KI_POSITION, KD_POSITION, 10000, 0) {
 
+                desired_velocity_net = 0;
+                desired_velocity_left = 0;
+                desired_velocity_right = 0;
+            }
+
+        void update();
         void setVel(float, float);
         void setVel(float);
         void charge();
         void search();
         void deployRamps();
         void guardLine();
-
-        float getDesiredVelocityLeft();
-        float getDesiredVelocityRight();
  };
 
 #endif

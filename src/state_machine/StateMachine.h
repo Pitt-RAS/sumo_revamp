@@ -1,29 +1,30 @@
 #ifndef STATEMACHINE_H
 #define STATEMACHINE_H
 
-#include "motion/motion.h"
-#include "Robot.h"
+#include "../config.h"
+#include "../motion/motion.h"
+#include "../robot/Robot.h"
 
 
 class StateMachine
 {
     private: 
-        Motion motion;
         Robot sumo;
+        Motion motion;
 
-        int current_velocity;
-        int current_direction; // 1 or -1
-        int enemy_direction;   // 1 or -1
-        int current_angle;     // -90 to 90
         int current_state;
 
-
     public:
-        StateMachine();
+        StateMachine(int starting_state) :
+            sumo(),
+            motion(sumo) {
+                current_state = starting_state;
+            } 
 
         int getState();
         void updateState();
         void executeState();
+        void deployRamps();
 }; 
 
 #endif

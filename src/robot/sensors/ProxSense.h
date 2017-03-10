@@ -1,6 +1,9 @@
 #ifndef PROXSENSE_H
 #define PROXSENSE_H
 
+#include <Arduino.h>
+#include "../../config.h"
+
 class ProxSense
 {
     private:

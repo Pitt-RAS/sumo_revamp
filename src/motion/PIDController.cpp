@@ -1,19 +1,17 @@
-#include <Arduino.h>
-
 #include "PIDController.h"
 
 PIDController::PIDController(float initial_KP, float initial_KI, float initial_KD, float initial_i_upper_bound,
-                             float temp_i_lower_bound) {
+                             float initial_i_lower_bound) {
     kp = initial_KP;
     ki = initial_KI;
     kd = initial_KD;
   
-    if (temp_i_lower_bound == 0) {
-        temp_i_lower_bound = -temp_i_upper_bound;
+    if (initial_i_lower_bound == 0) {
+        initial_i_lower_bound = -initial_i_upper_bound;
     }
 
-    i_lower_bound = temp_i_lower_bound;
-    i_upper_bound = temp_i_upper_bound;
+    i_lower_bound = initial_i_lower_bound;
+    i_upper_bound = initial_i_upper_bound;
 }
 
 float PIDController::Calculate(float current_value, float target_value) {

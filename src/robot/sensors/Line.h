@@ -15,7 +15,7 @@ class Line
         bool is_white[3][3];
 
     public: 
-        LineSense(int fl_pin, int fr_pin, int bl_pin, int br_pin) :
+        Line(int fl_pin, int fr_pin, int bl_pin, int br_pin) :
                   FL_PIN(fl_pin),
                   FR_PIN(fr_pin),
                   BL_PIN(bl_pin),

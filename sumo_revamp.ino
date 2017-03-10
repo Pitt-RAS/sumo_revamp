@@ -1,33 +1,12 @@
-#include <EncoderPittMicromouse.h>
 #include <Arduino.h>
+#include <EncoderPittMicromouse.h>
 #include "src/config.h"
 
-// Devices
-#include "src/device/motors.h"
-#include "src/device/ProxSense.h"
-#include "src/device/sensors_orientation.h"
-#include "src/device/I2Cdev.h"
-#include "src/device/MPU9150.h"
-#include "src/device/LineSense.h"
-// Debugging
-#include "src/debugging/Logger.h"
-// FSM
-#include "src/StateMachine.h"
-#include "src/Robot.h"
-// Motion
-#include "src/motion/motion.h"
+#include "src/state_machine/StateMachine.h"
 
-const bool display = false;
+StateMachine stateMachine(CHARGE);
+
 const bool competition = false;
-
-// Robot object
-Robot sumo();
-
-// Motion Control object
-Motion motion(opponent, lineSensors);
-
-// Robot FSM object
-StateMachine stateMachine();
 
 void setup() { 
 
@@ -60,12 +39,12 @@ void setup() {
     //Button Press
     Serial.println("Waiting for Button");
     while (digitalRead(BUTTON_PIN)){
-        sumo.update();  // need to update pid loop (why?)
+        stateMachine.updateState();  // need to update pid loop (why?)
         delay(10); // possibly to prevent sumo.update from being called too often
     }
     Serial.println("Button Pressed");
     delay(5000);
-    motion.deployRamps();
+    stateMachine.deployRamps();
 }
 
 void loop(){
@@ -76,5 +55,4 @@ void loop(){
     stateMachine.updateState();
     stateMachine.executeState();
 
-    motion.update(); // what does update pid loop mean?
 }

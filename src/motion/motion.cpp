@@ -1,26 +1,21 @@
 #include "motion.h"
 
-Motion::Motion(Robot& passedSumo) {
-    sumo = passedSumo;
-    encoderFL = sumo.encoderFL;
-    encoderFR = sumo.encoderFR;
-    encoderBL = sumo.encoderBL;
-    encoderBR = sumo.encoderBR;
+void Motion::update() {
+    sumo.setDesiredVelocity(desired_velocity_net);
+    sumo.setDesiredVelocity(1,  desired_velocity_left);
+    sumo.setDesiredVelocity(-1, desired_velocity_right);
 
-    motorLeft  (L_MOTOR_DIR_PIN, L_MOTOR_PWM_PIN, L_MOTOR_FORWARD_STATE),
-    motorRight (R_MOTOR_DIR_PIN, R_MOTOR_PWM_PIN, R_MOTOR_FORWARD_STATE),
-    pidLeft  (KP_POSITION, KI_POSITION, KD_POSITION),
-    pidRight (KP_POSITION, KI_POSITION, KD_POSITION),
+    current_velocity_left  = sumo.getCurrentVelocity(0,  1);
+    current_velocity_right = sumo.getCurrentVelocity(0, -1);
 
-    target_velocity_left  = 0;
-    target_velocity_right = 0;
+	float modified_velocity_left  = pidLeft.Calculate (current_velocity_left,  desired_velocity_left);
+	float modified_velocity_right = pidRight.Calculate(current_velocity_right, desired_velocity_right);
+	setVelRaw(modified_velocity_left, modified_velocity_right);
 }
 
-
 //Public state setting methods
-void Motion::charge()
-{
-	setVel(CHARGE_VELOCITY * sumo.getEnemyDirection, FUDGE_FACTOR * sumo.getEnemyAngle());
+void Motion::charge() {
+	setVel(CHARGE_VELOCITY * sumo.getEnemyDirection(), FUDGE_FACTOR * sumo.getEnemyAngle());
 }
 
 
@@ -42,33 +37,30 @@ void Motion::deployRamps() {
 }
 
 
-void Motion::setVel(float net_velocity, float angle_of_turn) {
+void Motion::setVel(float input_desired_velocity_net, float angle_of_turn) {
 	//Do work to calculate individual motor velocities from angular acceleration and centerline velocity
-	desired_velocity_left  = net_velocity + ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * angle_of_turn)/2.0); //Replace with trig to calculate the desired wheel speed.
-	desired_velocity_right = net_velocity - ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * angle_of_turn)/2.0); //Replace with trig to calculate the deisred wheel speed.
-
-	int modified_velocity_left  = pidLeft.Calculate (current_velocity_left,  desired_velocity_left);
-	int modified_velocity_right = pidRight.Calculate(current_velocity_right, target_velocity_right);
-	setVelRaw(modified_velocity_left, modified_velocity_right);
+    desired_velocity_net = input_desired_velocity_net;
+	desired_velocity_left  = desired_velocity_net + ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * angle_of_turn)/2.0); //Replace with trig to calculate the desired wheel speed.
+	desired_velocity_right = desired_velocity_net - ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * angle_of_turn)/2.0); //Replace with trig to calculate the deisred wheel speed.
 }
 
 
 //Private methods
-void Motion::setVelRaw(int velocity_right, int velocity_right){
-	bool r, l;
+void Motion::setVelRaw(float velocity_left, float velocity_right){
+    bool left_going_forward;
+	bool right_going_forward;
 	if(velocity_left > 0){
-		l = true;
+		left_going_forward = true;
 	}
 	else {
-		l = false;
+		left_going_forward = false;
 	}
 	if(velocity_right > 0){
-		r = true;
+		right_going_forward = true;
 	}
 	else {
-		r = false;
+		right_going_forward = false;
 	}
-    motor_r.SetRaw(r, abs(rpwm));
-    motor_l.SetRaw(l, abs(lpwm));
+    motorLeft.SetRaw (left_going_forward,  abs(velocity_left));
+    motorRight.SetRaw(right_going_forward, abs(velocity_right));
 }
-

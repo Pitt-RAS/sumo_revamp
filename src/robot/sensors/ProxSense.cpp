@@ -1,7 +1,4 @@
-#include <Arduino.h>
-
 #include "ProxSense.h"
-#include "../config.h"
 
 void ProxSense::update()
 {

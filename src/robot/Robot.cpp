@@ -1,27 +1,47 @@
 #include "Robot.h"
 
-Robot::Robot() {
-
-    Line line(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_PIN, BR_LINESENSE_PIN);
-
-    Movement movement();
-    
-    Proximity prox;
-}
-
+////////// ROBOT //////////
 void Robot::update() {
-    motion.update(); // for desired velocities
     prox.update();
     line.update();
     movement.update();
 }
 
+////////// PROXIMITY //////////
+int Robot::getEnemyDirection() {
+    return prox.getEnemyDirection();
+}
+
+int Robot::getEnemyAngle() {
+    return prox.getEnemyAngle();
+}
+
+bool Robot::enemyInSight() {
+    return prox.enemyInSight();
+}
+
+////////// LINE //////////
 bool Robot::isWhite() {
     return line.isWhite(0, 0);
 }
 
 bool Robot::isWhite(int direction, int side) {
     return line.isWhite(direction, side);
+}
+
+////////// MOVEMENT //////////
+void Robot::setDesiredVelocity(float desired_velocity) {
+    movement.setDesiredVelocity(0, 0, desired_velocity);
+}
+
+void Robot::setDesiredVelocity(int side, float desired_velocity) {
+    movement.setDesiredVelocity(0,  side, desired_velocity);
+    movement.setDesiredVelocity(1,  side, desired_velocity);
+    movement.setDesiredVelocity(-1, side, desired_velocity);
+}
+
+void Robot::setDesiredVelocity(int direction, int side, float desired_velocity) {
+    movement.setDesiredVelocity(direction, side, desired_velocity);
 }
 
 int Robot::getCurrentDirection() {
@@ -33,11 +53,11 @@ int Robot::getCurrentDirection(int direction, int side) {
 }
 
 int Robot::getDesiredDirection() {
-    return Movement.getDesiredDirection(0, 0);
+    return movement.getDesiredDirection(0, 0);
 }
 
-int Robot::getDesiredDirection(int direction, side) {
-    return Movement.getDesiredDirection(direction, side);
+int Robot::getDesiredDirection(int direction, int side) {
+    return movement.getDesiredDirection(direction, side);
 }
 
 float Robot::getCurrentVelocity() {
@@ -57,12 +77,14 @@ float Robot::getDesiredVelocity(int direction, int side) {
 }
 
 float Robot::getVelocityError() {
-    return movement.getError(0, 0);
+    return movement.getVelocityError(0, 0);
 }
 
 float Robot::getVelocityError(int direction, int side) {
     return movement.getVelocityError(direction, side);
 }
+
+////////// ABSTRACTIONS //////////
 
 // Uncomment when accelerometer is working, this is just to say if our acceleration is one standard devation different than we expect we are probably in contact with something
 
@@ -92,7 +114,7 @@ bool Robot::possiblyInContact() {
 */
 
 bool Robot::possiblyLosing() {
-    if ((movement.getCurrentDirection() != movement.getDesiredDirection())) {
+    if ((getCurrentDirection() != getDesiredDirection())) {
         return true;
     }
     else
@@ -102,12 +124,12 @@ bool Robot::possiblyLosing() {
 }
 
 bool Robot::possiblyUnder() {
-    if (!line.onLine || !prox.enemyInSight()) {
+    if (!isWhite() || !enemyInSight()) {
         return false;
     }
     else
     {
-        return line.lineInDirection(prox.getEnemyDirection());
+        return isWhite(getEnemyDirection(), 0);
     }
 }
 

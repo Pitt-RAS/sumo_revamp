@@ -3,7 +3,7 @@
 
 class Motor {
     private:
-        int pin_, pin_pwm_;
+        int pin_, pwm_pin_;
         bool forward_state_;
     public:
         Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state);

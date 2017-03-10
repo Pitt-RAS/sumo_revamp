@@ -1,14 +1,5 @@
 #include "Movement.h"
 
-Movement::Movement() {
-    encoderFL(FL_ENCODERA_PIN, FL_ENCODERB_PIN);
-    encoderFR(FR_ENCODERA_PIN, FR_ENCODERB_PIN);
-    encoderBL(BL_ENCODERA_PIN, BL_ENCODERB_PIN);
-    encoderBR(BR_ENCODERA_PIN, BR_ENCODERB_PIN);
-
-    update();
-}
-
 void Movement::update() {
     // Every index should be subtracted by 1 to indicate direction and side properly
     current_velocity[2][2] = 1000 * encoderFL.stepRate() * MM_PER_STEP;
@@ -59,7 +50,7 @@ int Movement::getDesiredDirection(int direction, int side) {
     }
 }
 
-float Movement::getCurrentVelocity(int direciton, int side) {
+float Movement::getCurrentVelocity(int direction, int side) {
     return current_velocity[direction + 1][side + 1];
 }
 

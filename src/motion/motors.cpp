@@ -5,13 +5,13 @@
 #include "../config.h"
 
 Motor::Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state){
-	output_pin = motor_f_pin;
-	pwn_pin = motor_f_pwm_pin;
-	forward_state = motor_f_forward_state;
+	pin_ = motor_f_pin;
+	pwm_pin_ = motor_f_pwm_pin;
+	forward_state_ = motor_f_forward_state;
 
 	//initializes pins for motors
-	pinMode(output_pin, OUTPUT);
-	pinMode(pwn_pin, OUTPUT);
+	pinMode(pin_, OUTPUT);
+	pinMode(pwm_pin_, OUTPUT);
 	
 }
 
@@ -50,15 +50,15 @@ void Motor::Set(float acceleration, float current_velocity) {
     }
 
     digitalWrite(pin_, pin_state ^ forward_state_ ^ 1);
-    analogWrite(pin_pwm_, speed_raw);
+    analogWrite(pwm_pin_, speed_raw);
     }
 
     void Motor::SetRaw(bool forward, int speed_raw) {
     if (forward) {
-        digitalWrite(output_pin, HIGH);
+        digitalWrite(pin_, HIGH);
     }
     else {
-        digitalWrite(output_pin, LOW);
+        digitalWrite(pin_, LOW);
     }
-    analogWrite(pwn_pin, speed_raw);
+    analogWrite(pwm_pin_, speed_raw);
 }

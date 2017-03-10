@@ -6,7 +6,6 @@
 #include "sensors/Proximity.h"
 #include "sensors/Line.h"
 #include "sensors/Movement.h"
-#include <EncoderPittMicromouse.h>
 
 class Robot
 {
@@ -16,17 +15,27 @@ class Robot
         Line line;
 
     public:
-        Robot();
+        // ROBOT
+        Robot() :
+            movement(),
+            prox(),
+            line(FL_LINESENSE_PIN, FR_LINESENSE_PIN, BL_LINESENSE_PIN, BR_LINESENSE_PIN) {}
 
         void update();
 
-        int getEnemyAngle();
+        // PROXIMITY
         int getEnemyDirection();
+        int getEnemyAngle();
         bool enemyInSight();
 
+        // LINE
         bool isWhite();
         bool isWhite(int, int);
 
+        // MOVEMENT
+        void setDesiredVelocity(float);
+        void setDesiredVelocity(int, float);
+        void setDesiredVelocity(int, int, float);
 
         int getCurrentDirection();
         int getCurrentDirection(int, int);
@@ -43,9 +52,10 @@ class Robot
         float getVelocityError();
         float getVelocityError(int, int);
 
+        // ABSTRACTIONS
         // bool possiblyInContact();
         bool possiblyLosing();
         bool possiblyUnder();
         // bool wheelsLostTraction();
-}
-
+};
+#endif
