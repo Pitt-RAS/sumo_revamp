@@ -1,5 +1,3 @@
-#include <Arduino.h>
-#include "../config.h"
 #include "LineSensor.h"
 
 LineSensor::LineSensor(int fl_pin, int fr_pin, int bl_pin, int br_pin){

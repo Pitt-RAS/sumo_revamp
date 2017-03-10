@@ -1,5 +1,21 @@
 #include "motion.h"
 
+Motion::Motion()
+	:motor_l (L_MOTOR_DIR_PIN, L_MOTOR_PWM_PIN, L_MOTOR_FORWARD_STATE),
+	motor_r (R_MOTOR_DIR_PIN, R_MOTOR_PWM_PIN, R_MOTOR_FORWARD_STATE),
+	pid_left (KP_POSITION, KI_POSITION, KD_POSITION),
+	pid_right (KP_POSITION, KI_POSITION, KD_POSITION),
+	flEn(FL_ENCODERA_PIN, FL_ENCODERB_PIN), //Front Left Encoder (1)
+	frEn(FR_ENCODERA_PIN, FR_ENCODERB_PIN), //Front Right Encoder (2)
+	blEn(BL_ENCODERA_PIN, BL_ENCODERB_PIN), //Back Left Encoder (3)
+	brEn(BR_ENCODERA_PIN, BR_ENCODERB_PIN) //Back Right Encoder (4)
+{
+
+  //Setup the interrupt to call update
+  target_left_v = 0;
+  target_right_v = 0;
+}
+
 void Motion::update()
 {
 	//Update PID controllers
@@ -10,25 +26,24 @@ void Motion::update()
 
 	int lpwm = pid_left.Calculate(left_v, target_left_v);
 	int rpwm = pid_right.Calculate(right_v, target_right_v);
-
+	Serial.print("rpwm: ");
+	Serial.print(rpwm);
+	Serial.print("lpwm: ");
+	Serial.println(lpwm);
 	setVelRaw(rpwm, lpwm);
 }
 //Public state setting methods
 void Motion::charge()
 {
-	setVel(CHARGE_VELOCITY * opponent.direction, FUDGE_FACTOR * opponent.getAngle()); //Go forward not rotation
+	setVel(CHARGE_VELOCITY, 0); //Go forward not rotation
 }
 
-void Motion::search()
+void Motion::search_arc()
 {
 	setVel(1.0, 0.2); //10 m/s, 10rad/s rotation
 }
 
-void Motion::guardLine() {
-    setVel(CHARGE_VELOCITY * opponent.direction * -1, FUDGE_FACTOR * opponent.getAngle() * -1); // charge directly away from them
-}
-
-void Motion::deployRamps()
+void Motion::deploy_ramps()
 {
 	setVelRaw(1024, -1024);
 	delay(100); //Deploys the plows
@@ -102,17 +117,6 @@ float Motion::EnVelocityBR(){
 	 return (1000 * brEn.stepRate() * MM_PER_STEP);
 }
 
-int Motion::getCurrentDirection() {
-    float averageVelocity = (flEn.stepRate() + frEn.stepRate() + blEn.stepRate() + brEn.stepRate()) / 4.0;
-    if (averageVelocity > 0) {
-        return FRONT;
-    } else if (averageVelocity < 0) {
-        return REAR;
-    } else {
-        return 0;
-    }
-}
-
 //Private methods
 void Motion::setVelRaw(int rpwm, int lpwm){
 	bool r, l;
@@ -128,7 +132,10 @@ void Motion::setVelRaw(int rpwm, int lpwm){
 	else {
 		l = false;
 	}
-    motor_r.SetRaw(r, abs(rpwm));
-    motor_l.SetRaw(l, abs(lpwm));
+	setVelRaw(r, abs(rpwm), l, abs(lpwm)); //Sets the velocity to be equal to the PWM if the PWM is positive
 }
 
+void Motion::setVelRaw(bool r, int pwmr, bool l, int pwml) {
+	motor_r.SetRaw(r, pwmr);
+	motor_l.SetRaw(l, pwml);
+}

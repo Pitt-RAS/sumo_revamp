@@ -13,9 +13,6 @@
 	13
 */
 
-//AI Settings
-#define KAMIKAZE false
-
 //BlueTooth Pins
 #define BT_TX 0
 #define BT_RX 1
@@ -150,9 +147,9 @@
 #define MAX_VEL_CORNER .5 // m/s
 
 #define PROXIMITY_INACTIVE 9999999
-#define SEARCH_ARC_VELOCITY 1
+#define SEARCH_ARC_VELOCITY 512
 #define SEARCH_ARC_ROTATION 10
-#define CHARGE_VELOCITY 3
+#define CHARGE_VELOCITY 512
 
 // FSM Definitions
 #define CHARGE 0
@@ -160,9 +157,5 @@
 #define EVADE 2
 #define SEARCH 3
 #define RECOVER 4
-#define GUARD_LINE 5
-
-#define FRONT 1
-#define REAR -1
 
 #endif
