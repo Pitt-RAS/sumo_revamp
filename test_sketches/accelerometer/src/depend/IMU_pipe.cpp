@@ -222,6 +222,9 @@ bool IMU_pipe::update() {
 		// Accelerometer update
 		accel_x = (uint16_t)fifo_buffer[0] << 8 | fifo_buffer[1];
 		accel_y = (uint16_t)fifo_buffer[2] << 8 | fifo_buffer[3];
+		
+		accelX = accel_x/ACCEL_LSB_PER_G;
+   		accelY = accel_y/ACCEL_LSB_PER_G;
 
 		// Gyro update
 		dt = (next_update_time_ - last_update_time_) / 1000000.0;
@@ -280,9 +283,9 @@ float IMU_pipe::getHeading() {
 
 
 float IMU_pipe::getXAccel() {
-  return accel_x;
+  return accelX;
 }
 float IMU_pipe::getYAccel() {
-  return accel_y;
+  return accelY;
 }
 

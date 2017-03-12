@@ -2,13 +2,10 @@
 
 void Accelerometer::update()
 {
-	while(!pipe.update()){}
 	pipe.handler_update_ = false;
+	while(!pipe.update()){}
 	xAccel = pipe.getXAccel();
 	yAccel = pipe.getYAccel();
-	
-    xAccel /= ACCEL_LSB_PER_G;
-    yAccel /= ACCEL_LSB_PER_G;
 
     if (abs(xAccel) > FAILSAFE_ACCEL_THRESHOLD || abs(yAccel) > FAILSAFE_ACCEL_THRESHOLD) 
     {

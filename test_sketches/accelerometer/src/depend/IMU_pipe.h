@@ -40,8 +40,8 @@ class IMU_pipe {
     float mag_heading_offset_;
     float last_mag_heading_;
     
-    float accel_x;
-    float accel_y;
+    float accelX;
+    float accelY;
     
     
   public:
