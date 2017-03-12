@@ -4,7 +4,7 @@ void Accelerometer::update()
 {
 	
 	pipe.update();
-	
+	pipe.handler_update_ = false;
 	xAccel = pipe.getXAccel();
 	yAccel = pipe.getYAccel();
 	

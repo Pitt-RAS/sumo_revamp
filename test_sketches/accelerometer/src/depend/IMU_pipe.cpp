@@ -269,7 +269,7 @@ void IMU_pipe::incrementHeading(float offset) {
   } else if (mag_heading_offset_ > 180) {
     mag_heading_offset_ -= 360;
   }
-}s
+}
 
 float IMU_pipe::getHeading() {
   float elapsed_time = (micros() - last_update_time_) / 1000000.0;
