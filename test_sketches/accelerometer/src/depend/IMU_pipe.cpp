@@ -223,8 +223,8 @@ bool IMU_pipe::update() {
 		accel_x = (uint16_t)fifo_buffer[0] << 8 | fifo_buffer[1];
 		accel_y = (uint16_t)fifo_buffer[2] << 8 | fifo_buffer[3];
 		
-		accelX = accel_x/ACCEL_LSB_PER_G;
-   		accelY = accel_y/ACCEL_LSB_PER_G;
+		accelX = (float) accel_x/ACCEL_LSB_PER_G;
+   		accelY = (float) accel_y/ACCEL_LSB_PER_G;
 
 		// Gyro update
 		dt = (next_update_time_ - last_update_time_) / 1000000.0;
