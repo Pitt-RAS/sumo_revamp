@@ -12,15 +12,15 @@ void loop() {
 
   accel.update();
 
-  float forward = accel.getMaxForwardAccel();
-  float radial = accel.getMaxRadialAccel();
+  float Xaccel = accel.getXAccel();
+  float Yaccel = accel.getYAccel();
 
-   Serial.print("Forward: ");
-   Serial.println(forward);
+   Serial.print("X: ");
+   Serial.println(Xaccel);
    Serial.println();
-   Serial.print("Radial: ");
-   Serial.println(radial);
+   Serial.print("Y: ");
+   Serial.println(Yaccel);
 
-   delay(500);
+   delay(50);
    
 }

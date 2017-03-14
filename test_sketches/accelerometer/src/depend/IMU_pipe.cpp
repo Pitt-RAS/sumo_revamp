@@ -1,4 +1,8 @@
 #include "IMU_pipe.h"
+#include <cstring>
+
+//using namespace std;
+
 
 volatile bool IMU_pipe::initialized_ = false;
 
@@ -48,7 +52,7 @@ void IMU_pipe::init() {
 
 	// Set accelerometer settings
 	mpu_.setFullScaleAccelRange(MPU9150_ACCEL_FS_16); // range of 16g
-	mpu_.setZAccelOffset(1788);
+	mpu_.setZAccelOffset(2000);
 
 	// Enable FIFO buffers
 	mpu_.setFIFOEnabled(true);
@@ -223,8 +227,13 @@ bool IMU_pipe::update() {
 		accel_x = (uint16_t)fifo_buffer[0] << 8 | fifo_buffer[1];
 		accel_y = (uint16_t)fifo_buffer[2] << 8 | fifo_buffer[3];
 		
-		accelX = (float) accel_x/ACCEL_LSB_PER_G;
-   		accelY = (float) accel_y/ACCEL_LSB_PER_G;
+		int16_t accel_x_signed;
+		int16_t accel_y_signed;
+		
+		std::memcpy(&accel_x_signed, &accel_x, sizeof(accel_x_signed));
+		std::memcpy(&accel_y_signed, &accel_y, sizeof(accel_y_signed));
+		accelX = (float) accel_x_signed / (float) ACCEL_LSB_PER_G;
+   		accelY = (float) accel_y_signed / (float) ACCEL_LSB_PER_G;
 
 		// Gyro update
 		dt = (next_update_time_ - last_update_time_) / 1000000.0;
