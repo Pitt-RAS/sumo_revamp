@@ -64,11 +64,6 @@ bool Accelerometer::collision()
 			collide = false;
 		
 		}
-		
-	Serial.println(x_diff);
-	
-	Serial.println(x_accel_average);
-	
 	return collide;
 }
 
