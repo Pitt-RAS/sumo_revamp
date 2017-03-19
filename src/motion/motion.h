@@ -19,6 +19,8 @@ class Motion
 
         PIDController pidLeft;
         PIDController pidRight;
+        
+        elapsedMicros elapsed_time;
 
         float desired_velocity_net;
         float desired_velocity_left;

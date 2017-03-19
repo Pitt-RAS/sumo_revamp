@@ -10,7 +10,13 @@ void Motion::update() {
 
 	float modified_velocity_left  = pidLeft.Calculate (current_velocity_left,  desired_velocity_left);
 	float modified_velocity_right = pidRight.Calculate(current_velocity_right, desired_velocity_right);
-	setVelRaw(modified_velocity_left, modified_velocity_right);
+	
+	
+	float accel_left = (modified_velocity_left - current_velocity_left)/elapsed_time;
+	float accel_right = (modified_velocity_right - current_velocity_right)/elapsed_time;
+	
+	 motorLeft.Set(accel_left,  current_velocity_left);
+	 motorRight.Set(accel_right,  current_velocity_right);	
 }
 
 //Public state setting methods
@@ -30,9 +36,11 @@ void Motion::guardLine() {
 
 
 void Motion::deployRamps() {
-	setVelRaw(1024, -1024);
+	motorLeft.SetRaw(true,  1024);
+	motorRight.SetRaw(false,  1024);	
 	delay(100); //Deploys the plows
-	setVelRaw(0, 0);
+	motorLeft.SetRaw(false,  0);
+	motorRight.SetRaw(true,  0);	
 	delay(200);
 }
 
@@ -44,23 +52,3 @@ void Motion::setVel(float input_desired_velocity_net, float angle_of_turn) {
 	desired_velocity_right = desired_velocity_net - ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * angle_of_turn)/2.0); //Replace with trig to calculate the deisred wheel speed.
 }
 
-
-//Private methods
-void Motion::setVelRaw(float velocity_left, float velocity_right){
-    bool left_going_forward;
-	bool right_going_forward;
-	if(velocity_left > 0){
-		left_going_forward = true;
-	}
-	else {
-		left_going_forward = false;
-	}
-	if(velocity_right > 0){
-		right_going_forward = true;
-	}
-	else {
-		right_going_forward = false;
-	}
-    motorLeft.SetRaw (left_going_forward,  abs(velocity_left));
-    motorRight.SetRaw(right_going_forward, abs(velocity_right));
-}
