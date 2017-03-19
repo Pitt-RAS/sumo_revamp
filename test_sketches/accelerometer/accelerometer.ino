@@ -2,39 +2,39 @@
 #include "src/config.h"
 #include "src/Accelerometer.h"
 
-void setup() {
+void setup() 
+{
   Serial.begin(BAUD);
 }
 
-void loop() {
-
+void loop() 
+{
   Accelerometer accel;
 
   while (true)
   {
-     accel.update();
+    accel.update();
 
- /* float Xaccel = accel.getXAccel();
-  float Yaccel = accel.getYAccel();
+    /* float Xaccel = accel.getXAccel();
+    float Yaccel = accel.getYAccel();
 
-   Serial.print("X: ");
-   Serial.println(Xaccel);
-   Serial.println();
-   Serial.print("Y: ");
-   Serial.println(Yaccel);
-*/
-  bool collision = accel.collision();
+    Serial.print("X: ");
+    Serial.println(Xaccel);
+    Serial.println();
+    Serial.print("Y: ");
+    Serial.println(Yaccel);
+    */
+    
+    bool collision = accel.collision();
 
     if (collision)
-   {
-     Serial.println("COLLISION");
-   }
-   else 
     {
-     Serial.println();
+      Serial.println("COLLISION");
     }
-
-
-     delay(50);
+    else 
+    {
+      Serial.println();
+    }
+    delay(50);
   }
 }
