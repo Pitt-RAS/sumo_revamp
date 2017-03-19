@@ -1,12 +1,9 @@
-#include "IMU_pipe.h"
+#include "IMU.h"
 #include <cstring>
 
-//using namespace std;
+volatile bool IMU::initialized_ = false;
 
-
-volatile bool IMU_pipe::initialized_ = false;
-
-void IMU_pipe::init() {
+void IMU::init() {
 	// Initialize the I2C bus
 	#ifdef CORE_TEENSY
 		Wire.begin(I2C_MASTER, 0, I2C_PINS_18_19, I2C_PULLUP_EXT, I2C_RATE_400);
@@ -34,8 +31,8 @@ void IMU_pipe::init() {
 
 	attachInterrupt(interrupt_pin,
 				  []() -> void {
-					if (IMU_pipe::initialized_) {
-					  IMU_pipe::getInstance().interruptHandler();
+					if (IMU::initialized_) {
+					  IMU::getInstance().interruptHandler();
 					}
 				  },
 				  RISING);
@@ -86,9 +83,9 @@ void IMU_pipe::init() {
 	#endif
 }
 
-void IMU_pipe::interruptHandler() {
-  if (IMU_pipe::initialized_) {
-    IMU_pipe& pipe = IMU_pipe::getInstance();
+void IMU::interruptHandler() {
+  if (IMU::initialized_) {
+    IMU& pipe = IMU::getInstance();
     pipe.mpu_interrupt_ = true;
     pipe.next_update_time_ = micros();
     if (pipe.handler_update_) {
@@ -97,8 +94,8 @@ void IMU_pipe::interruptHandler() {
   }
 }
 
-IMU_pipe& IMU_pipe::getInstance() {
-  static IMU_pipe inst;
+IMU& IMU::getInstance() {
+  static IMU inst;
   if (!initialized_) {
     inst.init();
     initialized_ = true;
@@ -107,7 +104,7 @@ IMU_pipe& IMU_pipe::getInstance() {
   return inst;
 }
 
-void IMU_pipe::calibrate() {
+void IMU::calibrate() {
   //LOG("Calibrating gyro...\n");
 
   mpu_.setZGyroOffset(0);
@@ -186,7 +183,7 @@ void IMU_pipe::calibrate() {
  // LOG("Gyro calibration successful\n");
 }
 
-bool IMU_pipe::update() {
+bool IMU::update() {
 	if (!mpu_interrupt_ && fifo_count_ < packet_size_) {
 		return false;
 	}
@@ -267,13 +264,13 @@ bool IMU_pipe::update() {
 	}
 }
 
-void IMU_pipe::resetHeading() {
+void IMU::resetHeading() {
   raw_heading_ = 0;
   last_update_time_ = micros();
   mag_heading_offset_ = -last_mag_heading_;
 }
 
-void IMU_pipe::incrementHeading(float offset) {
+void IMU::incrementHeading(float offset) {
   raw_heading_ += offset;
   mag_heading_offset_ -= offset;
   if (mag_heading_offset_ < -180) {
@@ -283,7 +280,7 @@ void IMU_pipe::incrementHeading(float offset) {
   }
 }
 
-float IMU_pipe::getHeading() {
+float IMU::getHeading() {
   float elapsed_time = (micros() - last_update_time_) / 1000000.0;
   return raw_heading_ + last_gyro_reading_ * elapsed_time;
 }
@@ -291,10 +288,10 @@ float IMU_pipe::getHeading() {
 
 
 
-float IMU_pipe::getXAccel() {
+float IMU::getXAccel() {
   return accelX;
 }
-float IMU_pipe::getYAccel() {
+float IMU::getYAccel() {
   return accelY;
 }
 

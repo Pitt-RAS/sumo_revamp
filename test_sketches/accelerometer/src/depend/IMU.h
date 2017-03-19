@@ -1,5 +1,5 @@
-#ifndef IMU_PIPE_H_
-#define IMU_PIPE_H_
+#ifndef IMU_H_
+#define IMU_H_
 
 #include <Arduino.h>
 #include "I2Cdev.h"
@@ -7,9 +7,9 @@
 #include "../config.h"
 
 
-class IMU_pipe {
+class IMU {
   private:
-    IMU_pipe() = default;
+    IMU() = default;
     void init();
     void interruptHandler();
 
@@ -49,7 +49,7 @@ class IMU_pipe {
 
     // NEVER call this from an interrupt
     // (unless you're Orientation::interruptHandler, then it's kinda maybe ok)
-    static IMU_pipe& getInstance();
+    static IMU& getInstance();
 
     // determine the right offset for the gyro
     void calibrate();

@@ -10,9 +10,11 @@ void loop() {
 
   Accelerometer accel;
 
-  accel.update();
+  while (true)
+  {
+     accel.update();
 
-  float Xaccel = accel.getXAccel();
+ /* float Xaccel = accel.getXAccel();
   float Yaccel = accel.getYAccel();
 
    Serial.print("X: ");
@@ -20,7 +22,19 @@ void loop() {
    Serial.println();
    Serial.print("Y: ");
    Serial.println(Yaccel);
+*/
+  bool collision = accel.collision();
 
-   delay(50);
-   
+    if (collision)
+   {
+     Serial.println("COLLISION");
+   }
+   else 
+    {
+     Serial.println();
+    }
+
+
+     delay(50);
+  }
 }

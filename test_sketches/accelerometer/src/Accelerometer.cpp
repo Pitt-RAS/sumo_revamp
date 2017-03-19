@@ -24,6 +24,56 @@ void Accelerometer::update()
 
 }
 
+bool Accelerometer::collision()
+{
+	/******NEEDS TUNING**********/
+	
+	float x_diff = 0;
+	float y_diff = 0;
+
+		x_accel_average = (float) (abs(x_accel_average) + abs(xAccel))/2;
+		y_accel_average = (float) (abs(y_accel_average) + abs(yAccel))/2;
+		
+		x_diff = abs(abs(x_accel_average) - abs(xAccel));
+		y_diff = abs(abs(y_accel_average) - abs(yAccel));
+		
+		if (x_diff > (.25 * abs(x_accel_average)))
+		{
+			x_spike = true;
+		}
+		else 
+		{
+			x_spike = false;
+		}
+		
+		if (y_diff > (.25  * abs(y_accel_average)))
+		{
+			y_spike = true;
+		}
+		else 
+		{
+			y_spike = false;
+		}
+		
+		if (x_spike && y_spike)
+		{
+			collide = true;
+		}
+		else 
+		{
+			collide = false;
+		
+		}
+		
+	Serial.println(x_diff);
+	
+	Serial.println(x_accel_average);
+	
+	return collide;
+}
+
+
+
 void Accelerometer::resetMaxForwardAccel() {
   max_forward_accel_ = 0;
 }
