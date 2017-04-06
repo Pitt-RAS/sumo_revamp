@@ -10,6 +10,24 @@ ProxSense frontProx(proximity_sensors_front, proximity_sensors_front_weight);
 
 void setup() 
 { 
+  pinMode(SIGNAL_LED_PIN, OUTPUT);
+    digitalWrite(SIGNAL_LED_PIN, 0);
+    pinMode(BUZZER_PIN, OUTPUT);
+    analogWrite(BUZZER_PIN, 0);
+    pinMode(BUTTON_PIN, INPUT_PULLUP);
+    pinMode(IMU_INTERRUPT_PIN, INPUT);
+
+
+    ///////////////////Beginning Other PreSetup Scripts//////////////////////
+
+    //Set Serial Baud for debugging baud=bits per second
+    Serial.begin(BAUD);
+
+    // PWM resolution is 0-1023. wanted more than default
+    analogWriteResolution(PWM_SPEED_BITS);
+
+  
+  
   //Set Serial Baud for debugging baud=bits per second
   Serial.begin(BAUD);
   
