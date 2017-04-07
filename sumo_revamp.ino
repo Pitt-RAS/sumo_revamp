@@ -4,14 +4,14 @@
 #include "motors.h"
 #include "ProxSense.h"
 #include "sensors_orientation.h"
-#include <EncoderMod.h>
+#include <EncoderPittMicromouse.h>
 #include "I2Cdev.h"
 #include "MPU9150.h" 
 #include "Logger.h"
 #include "motion.h"
 
 //Turn on off test driver
-//#define TEST_DRIVER
+#define TEST_DRIVER
 
 //Create proximity sensor pin array initailize proximity sensors
 int proximity_sensors_front[5]        = {F_PROX1_PIN, F_PROX2_PIN, F_PROX3_PIN, F_PROX4_PIN, F_PROX5_PIN};
@@ -98,14 +98,14 @@ void setup() {
   
   //Button Press
   //setVelRaw(-1024, 1024);
-  while (digitalRead(BUTTON_PIN)){
+  /*while (digitalRead(BUTTON_PIN)){
 	    Serial.println("button!");
 		sumo.update();
 		delay(10);
 
   }
   delay(5000);
-  sumo.deploy_ramps();
+  sumo.deploy_ramps();*/
 }
 
 #ifndef TEST_DRIVER
@@ -201,8 +201,20 @@ void loop() {
 #define TEST_PROX
 //#define TEST_MOTORS_ENC
 //#define TEST_LINE_SENSORS
+//#define TEST_BUTTON
+//#define TEST_BATTERY
 
 void loop() {
+#ifdef TEST_BATTERY
+  Serial.print(analogRead(BATT_TEST_PIN));
+  Serial.print(" ");
+  Serial.println(BATTERY_VOLTAGE_WARNING_COUNT);
+#endif
+  
+#ifdef TEST_BUTTON
+  Serial.println(digitalRead(BUTTON_PIN));
+#endif
+  
 #ifdef TEST_PROX
 	Serial.print("front: ");
 	for(int ii = 0; ii < 5; ii++)

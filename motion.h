@@ -5,7 +5,7 @@
 #include "config.h"
 #include "motors.h"
 #include "PIDController.h"
-#include <EncoderMod.h>
+#include <EncoderPittMicromouse.h>
 
 class Motion
 {
@@ -16,10 +16,10 @@ private:
 	PIDController pid_left;
 	PIDController pid_right;
 	
-	Encoder flEn; //Front Left Encoder (1)
-	Encoder frEn; //Front Right Encoder (2)
-	Encoder blEn; //Back Left Encoder (3)
-	Encoder brEn; //Back Right Encoder (4)
+	EncoderPittMicromouse flEn; //Front Left Encoder (1)
+	EncoderPittMicromouse frEn; //Front Right Encoder (2)
+	EncoderPittMicromouse blEn; //Back Left Encoder (3)
+	EncoderPittMicromouse brEn; //Back Right Encoder (4)
 
 	float target_left_v, target_right_v;
 	//Private motion functions
