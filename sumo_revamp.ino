@@ -69,7 +69,7 @@ void setup() {
   analogWrite(L_MOTOR_PWM_PIN, 0);
   analogWrite(R_MOTOR_PWM_PIN, 0);
   
-  //MISC
+  //MISC 
   pinMode(SIGNAL_LED_PIN, OUTPUT);
   digitalWrite(SIGNAL_LED_PIN, 0);
   pinMode(BUZZER_PIN, OUTPUT);
@@ -89,8 +89,11 @@ void setup() {
 
   //Check Battery
   if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){
-    tone(BUZZER_PIN, 2000);
+    //tone(BUZZER_PIN, 38000);
   }
+
+
+  tone(BUZZER_PIN, 30000);
   
   // Set higher pwm frequency for smoother motor control.
   analogWriteFrequency(L_MOTOR_PWM_PIN, 46875);
@@ -228,6 +231,7 @@ void loop() {
 		Serial.print(digitalRead(proximity_sensors_rear[ii]));
 	}
 	Serial.println();
+ delay(100);
 #endif
 
 #ifdef TEST_MOTORS_ENC
