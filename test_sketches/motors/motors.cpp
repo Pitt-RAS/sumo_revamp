@@ -12,7 +12,6 @@ Motor::Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state){
 	//initializes pins for motors
 	pinMode(pin_, OUTPUT);
 	pinMode(pwm_pin_, OUTPUT);
-	
 }
 
 
