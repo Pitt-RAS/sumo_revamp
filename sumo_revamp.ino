@@ -89,15 +89,18 @@ void setup() {
 
   //Check Battery
   if(analogRead(BATT_TEST_PIN) <= BATTERY_VOLTAGE_WARNING_COUNT){
-    //tone(BUZZER_PIN, 38000);
+    tone(BUZZER_PIN, 2000);
+    while(1);
   }
 
-
-  tone(BUZZER_PIN, 30000);
-  
+  tone(BUZZER_PIN, 3000);
+  delay(1000);
+  //tone(BUZZER_PIN, 25000);
+  analogWriteFrequency(BUZZER_PIN, 38000);
+  analogWrite(BUZZER_PIN, 1023/2);
   // Set higher pwm frequency for smoother motor control.
-  analogWriteFrequency(L_MOTOR_PWM_PIN, 46875);
-  analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
+  //analogWriteFrequency(L_MOTOR_PWM_PIN, 46875);
+  //analogWriteFrequency(R_MOTOR_PWM_PIN, 46875);
   
   //Button Press
   //setVelRaw(-1024, 1024);
@@ -201,8 +204,8 @@ void loop() {
 
 #ifdef TEST_DRIVER
 
-#define TEST_PROX
-//#define TEST_MOTORS_ENC
+//#define TEST_PROX
+#define TEST_MOTORS_ENC
 //#define TEST_LINE_SENSORS
 //#define TEST_BUTTON
 //#define TEST_BATTERY
@@ -222,16 +225,16 @@ void loop() {
 	Serial.print("front: ");
 	for(int ii = 0; ii < 5; ii++)
 	{
-		Serial.print(digitalRead(proximity_sensors_front[ii]));
+		Serial.print(digitalRead(proximity_sensors_front[ii])^1);
 	}
 	Serial.print("    back:");
 	
 	for(int ii = 0; ii < 5; ii++)
 	{
-		Serial.print(digitalRead(proximity_sensors_rear[ii]));
+		Serial.print(digitalRead(proximity_sensors_rear[ii])^1);
 	}
 	Serial.println();
- delay(100);
+ delay(10);
 #endif
 
 #ifdef TEST_MOTORS_ENC
