@@ -2,7 +2,7 @@
 
 #include "motors.h"
 
-#include "../config.h"
+#include "config.h"
 
 Motor::Motor(int motor_f_pin, int motor_f_pwm_pin, bool motor_f_forward_state){
 	pin_ = motor_f_pin;
