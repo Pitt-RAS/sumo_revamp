@@ -1,12 +1,13 @@
 #include <Arduino.h>
 #include <EncoderPittMicromouse.h>
-#include "src/config.h"
-
-#include "src/state_machine/StateMachine.h"
-
-StateMachine stateMachine(CHARGE);
+#include "config.h"
+#include "motors.h"
 
 const bool competition = false;
+
+ Motor motorLeft(L_MOTOR_DIR_PIN, L_MOTOR_PWM_PIN, L_MOTOR_FORWARD_STATE);
+ Motor motorRight(R_MOTOR_DIR_PIN, R_MOTOR_PWM_PIN, R_MOTOR_FORWARD_STATE);
+
 
 void setup() { 
 
@@ -38,7 +39,6 @@ void setup() {
 
 
     waitForButton();
-    stateMachine.deployRamps();
 }
 
 void loop(){
@@ -46,8 +46,21 @@ void loop(){
         tone(BUZZER_PIN, 2000);
     }
 
-    stateMachine.updateState();
-    stateMachine.executeState();
+    motorLeft.SetRaw(true, 512);
+    motorRight.SetRaw(true, 512);
+
+    delay(2000);
+
+    motorLeft.SetRaw(true, 0);
+    motorRight.SetRaw(true, 0);
+
+    while(true)
+    {
+       motorLeft.SetRaw(true, 0);
+       motorRight.SetRaw(true, 0);
+    }
+
+
 
 }
 
