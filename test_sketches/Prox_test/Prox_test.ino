@@ -8,7 +8,7 @@ int rear_pin_array[5]  = {R_PROX1_PIN, R_PROX2_PIN, R_PROX3_PIN, R_PROX4_PIN, R_
 int weight_array[5]    = {-90,         -45,         0,           45,          90         };
 
 ProxSense frontProx(front_pin_array, weight_array);
-ProxSense rearProx (rear_pin_array,  weight_array);
+ProxSense rearProx(rear_pin_array,  weight_array);
  
 void setup()
 { 
