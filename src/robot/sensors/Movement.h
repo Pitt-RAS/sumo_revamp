@@ -9,8 +9,8 @@ class Movement
 {
     private:
         EncoderPittMicromouse encoderFL;
-        EncoderPittMicromouse encoderFR;
-        EncoderPittMicromouse encoderBL;
+        //EncoderPittMicromouse encoderFR;
+        //EncoderPittMicromouse encoderBL;
         EncoderPittMicromouse encoderBR;
 
         float current_velocity[3][3];
@@ -18,8 +18,8 @@ class Movement
     public:
         Movement() :
             encoderFL(FL_ENCODERA_PIN, FL_ENCODERB_PIN),
-            encoderFR(FR_ENCODERA_PIN, FR_ENCODERB_PIN),
-            encoderBL(BL_ENCODERA_PIN, BL_ENCODERB_PIN),
+            //encoderFR(FR_ENCODERA_PIN, FR_ENCODERB_PIN),
+            //encoderBL(BL_ENCODERA_PIN, BL_ENCODERB_PIN),
             encoderBR(BR_ENCODERA_PIN, BR_ENCODERB_PIN) {
                 update();
             }
