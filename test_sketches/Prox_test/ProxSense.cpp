@@ -18,6 +18,10 @@ void ProxSense::update()
 	for(int ii = 0; ii < 5; ii++)
 	{
 		prox[ii] = digitalRead(proxPin[ii]);
+    
+    Serial.print(ii);
+    Serial.print(":\t");
+    Serial.println(prox[ii]);
 	}
 }
 

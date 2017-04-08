@@ -39,13 +39,16 @@ void setup()
 }
 void loop()
 {   
-  int front_angle = frontProx.readAngle();
+   //Serial.println("FRONT:");
+  //int front_angle = frontProx.readAngle();
+  Serial.println("REAR:");
   int rear_angle = rearProx.readAngle();
 
-  Serial.print("Front Angle: \t");
+
+  /*Serial.print("Front Angle: \t");
   Serial.println(front_angle);
   Serial.print("\nRear Angle: \t");
-  Serial.println(rear_angle);
+  Serial.println(rear_angle);*/
   
-  delay(100);
+  delay(500);
 }
