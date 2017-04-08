@@ -164,7 +164,7 @@ void loop() {
 	}
 	else if(prox_rear_error != PROXIMITY_INACTIVE){
         if (display) {
-            sumo.setVel(0, 0)
+            sumo.setVel(0, 0);
         } else {
             sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
         }
