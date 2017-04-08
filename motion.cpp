@@ -6,8 +6,8 @@ Motion::Motion()
 	pid_left (KP_POSITION, KI_POSITION, KD_POSITION),
 	pid_right (KP_POSITION, KI_POSITION, KD_POSITION),
 	flEn(FL_ENCODERA_PIN, FL_ENCODERB_PIN), //Front Left Encoder (1)
-	frEn(FR_ENCODERA_PIN, FR_ENCODERB_PIN), //Front Right Encoder (2)
-	blEn(BL_ENCODERA_PIN, BL_ENCODERB_PIN), //Back Left Encoder (3)
+	//frEn(FR_ENCODERA_PIN, FR_ENCODERB_PIN), //Front Right Encoder (2)
+	//blEn(BL_ENCODERA_PIN, BL_ENCODERB_PIN), //Back Left Encoder (3)
 	brEn(BR_ENCODERA_PIN, BR_ENCODERB_PIN) //Back Right Encoder (4)
 {
 
@@ -21,8 +21,8 @@ void Motion::update()
 	//Update PID controllers
 	//Compare current velocities to desired, using PID loop to calculate the new the settings to send to setVelRaw();
 	//float left_v = ((flEn.stepRate() + blEn.stepRate())/2.0) * 1000.0 * MM_PER_STEP;
-	float left_v = ((blEn.stepRate())) * 1000.0 * MM_PER_STEP;
-	float right_v = ((frEn.stepRate() + brEn.stepRate())/2.0)  * 1000.0 * MM_PER_STEP;
+	float right_v = brEn.stepRate() * 1000.0 * MM_PER_STEP;
+	float left_v = flEn.stepRate() * 1000.0 * MM_PER_STEP;
 
 	int lpwm = pid_left.Calculate(left_v, target_left_v);
 	int rpwm = pid_right.Calculate(right_v, target_right_v);
@@ -108,10 +108,10 @@ float Motion::EnVelocityFL(){
 	 return (1000* flEn.stepRate() * MM_PER_STEP);
 }
 float Motion::EnVelocityFR(){
-	 return (1000 * frEn.stepRate() * MM_PER_STEP);
+	 return (1000 * brEn.stepRate() * MM_PER_STEP);
 }
 float Motion::EnVelocityBL(){
-	 return (1000 * blEn.stepRate() * MM_PER_STEP);
+	 return (1000 * flEn.stepRate() * MM_PER_STEP);
 }
 float Motion::EnVelocityBR(){
 	 return (1000 * brEn.stepRate() * MM_PER_STEP);

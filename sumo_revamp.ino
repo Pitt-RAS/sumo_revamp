@@ -11,7 +11,7 @@
 #include "motion.h"
 
 //Turn on off test driver
-//#define TEST_DRIVER
+#define TEST_DRIVER
 
 static bool display = false;
 
@@ -126,7 +126,7 @@ void loop() {
 
 	//Read sensors
 	int prox_front_error = frontProx.readAngle();
-	int prox_rear_error = rearProx.readAngle();
+	//int prox_rear_error = rearProx.readAngle();
 
 	//For debugging
 	/*Serial.print("front:");
@@ -162,13 +162,13 @@ void loop() {
             sumo.setVel(CHARGE_VEL, prox_front_error * FUDGE_FACTOR);
         }
 	}
-	else if(prox_rear_error != PROXIMITY_INACTIVE){
+	/*else if(prox_rear_error != PROXIMITY_INACTIVE){
         if (display) {
             sumo.setVel(0, 0);
         } else {
             sumo.setVel(-CHARGE_VEL, prox_rear_error * FUDGE_FACTOR);
         }
-	}
+	}*/
 
 	else if(!FL_Line || !FR_Line) //Line Checking
 	{
@@ -213,8 +213,8 @@ void loop() {
 
 #ifdef TEST_DRIVER
 
-#define TEST_PROX
-//#define TEST_MOTORS_ENC
+//#define TEST_PROX
+#define TEST_MOTORS_ENC
 //#define TEST_LINE_SENSORS
 
 void loop() {

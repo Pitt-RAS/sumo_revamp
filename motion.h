@@ -17,8 +17,8 @@ private:
 	PIDController pid_right;
 
 	EncoderPittMicromouse flEn; //Front Left EncoderPittMicromouse (1)
-	EncoderPittMicromouse frEn; //Front Right EncoderPittMicromouse (2)
-	EncoderPittMicromouse blEn; //Back Left EncoderPittMicromouse (3)
+	//EncoderPittMicromouse frEn; //Front Right EncoderPittMicromouse (2)
+	//EncoderPittMicromouse blEn; //Back Left EncoderPittMicromouse (3)
 	EncoderPittMicromouse brEn; //Back Right EncoderPittMicromouse (4)
 
 	float target_left_v, target_right_v;
@@ -27,9 +27,8 @@ private:
 
 public:
   Motion();
-  	void setVelRaw(int pwmr, int pwml);
-
-  	void setVel(float v, float w);
+  void setVelRaw(int pwmr, int pwml);
+  void setVel(float v, float w);
 	void setVel(float v);
 	void charge();
 	void search_arc();
