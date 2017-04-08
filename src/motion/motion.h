@@ -31,6 +31,9 @@ class Motion
         float current_velocity_right;
 
         void setVelRaw(float, float);
+        void setVelRaw(bool r, int pwmr, bool l, int pwml);
+
+  	
 
     public:
         Motion(Robot& passedSumo) :
@@ -44,6 +47,7 @@ class Motion
                 desired_velocity_left = 0;
                 desired_velocity_right = 0;
             }
+				void setVelRaw(int pwmr, int pwml);
 
         void update();
         void setVel(float, float);

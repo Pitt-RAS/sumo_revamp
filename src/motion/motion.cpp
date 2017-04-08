@@ -36,11 +36,9 @@ void Motion::guardLine() {
 
 
 void Motion::deployRamps() {
-	motorLeft.SetRaw(true,  1024);
-	motorRight.SetRaw(false,  1024);	
+	setVelRaw(1024, -1024);
 	delay(100); //Deploys the plows
-	motorLeft.SetRaw(false,  0);
-	motorRight.SetRaw(true,  0);	
+	setVelRaw(0, 0);
 	delay(200);
 }
 
@@ -50,5 +48,27 @@ void Motion::setVel(float input_desired_velocity_net, float angle_of_turn) {
 	desired_velocity_net = input_desired_velocity_net;
 	desired_velocity_left  = desired_velocity_net + ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * angle_of_turn)/2.0); //Replace with trig to calculate the desired wheel speed.
 	desired_velocity_right = desired_velocity_net - ((PI * DISTANCE_BETWEEN_WHEELS * (1024.0/ 1.5) * angle_of_turn)/2.0); //Replace with trig to calculate the deisred wheel speed.
+}
+
+void Motion::setVelRaw(int rpwm, int lpwm){
+	bool r, l;
+	if(rpwm > 0){
+		r = true;
+	}
+	else {
+		r = false;
+	}
+	if(lpwm > 0){
+		l = true;
+	}
+	else {
+		l = false;
+	}
+	setVelRaw(r, abs(rpwm), l, abs(lpwm)); //Sets the velocity to be equal to the PWM if the PWM is positive
+}
+
+void Motion::setVelRaw(bool r, int pwmr, bool l, int pwml) {
+	motorRight.SetRaw(r, pwmr);
+	motorLeft.SetRaw(l, pwml);
 }
 
